@@ -1,0 +1,889 @@
+<!-- 
+Gov.uk component scratchpad. 
+Original version Feb 27th, 2026 by Ian Smith.
+(ian.smith1@digital.homeoffice.gov.uk) 
+-->
+
+<!doctype html>
+<html lang="en" class="govuk-template">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>GOV.UK component scratchpad</title>
+
+
+
+
+<!-- include GOV.UK frontend -->
+<link rel="stylesheet" href="https://unpkg.com/govuk-frontend@6.0.0/dist/govuk/govuk-frontend.min.css"/>
+
+<style>
+  body { padding-bottom: 200px;}
+  #definition { width: 100%; height: 320px; font-family: monospace; }
+  .component-block { margin: 4px 0; padding: 4px; border: 0px solid #b1b4b6;  }
+  .gov-row { display: flex; flex-wrap: wrap; width: 100%; margin: 20px 0; }
+  .gov-col { padding: 10px; }
+  .showCode{color:#444;background-color:#ddd}
+  .specHeader {font-size:12pt; vertical-align:top; border: 2px solid white;background-color:#eee;}
+  .specRow {font-size:12pt; vertical-align:top; border: 0px solid white;background-color:#fff;}
+  .specRow2 {font-size:12pt;vertical-align:top; border: 0px solid white;background-color:#eee;}
+</style>
+</head>
+
+<body class="govuk-template__body govuk-frontend-supported">
+<script>document.body.className += " js-enabled";</script>
+
+<div class="govuk-header" style="padding-top:20px">
+  <div class="govuk-header__container govuk-width-container">
+  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 1.4)</h1>
+   </div>
+  </div>
+  
+ <div class="govuk-phase-banner govuk-width-container">
+  <p class="govuk-phase-banner__content">
+    <strong class="govuk-tag govuk-phase-banner__content__tag">
+      Discovery
+    </strong>
+    <span class="govuk-phase-banner__text">
+      This is a new tool and not fully tested. More details at the git repository.
+    </span>
+  </p>
+</div> 
+  
+<div class="govuk-width-container">
+<p>&nbsp;<p>
+<!-- 
+<h1 class="govuk-heading-l">GOV.UK component scratchpad (v 1.4)</h1>
+ -->
+<p class="govuk-body">You can use this tool to quickly create html content for pages based on gov.uk components.</p>
+  <details class="govuk-details" data-module="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">How it works</span>
+           </summary>
+			<div class="govuk-details__text">
+				  Instead of writing html code, you describe each component using (relatively) plain language.<br><br>
+				 Each new component description must start with ##. The format is:<br>
+				 <code class="showCode">##component_name | Label or text | Further options</code><br><br>
+				 Returns are allowed so you can write multiple paragraphs of content, e.g.<br>
+				 <code class="showCode">##p | This is simple paragraph of text.<br><br> And so is this.</code><br><br>
+				 Components with repeating elements, like the summary list, table or check answers components work like this:<br>
+				 <code class="showCode">##component_name | Label or text | column value:column value:column value</code><br><br>
+			
+				You can provide basic layout using <code class="showCode">Row</code> and <code class="showCode">Column</code>. You can define column width using the format 'Column|width' e.g. <code class="showCode">Column|100</code> will be full width,  <code class="showCode">Column|50</code> will be 50%.<br><br>
+				Once you're happy with the html, use the control below to copy it to the clipboard, then you can add it to your prototype.<br><br>
+				For supported components as of 2 Mar 2026, see below.
+			</div>
+  </details>
+
+ <details class="govuk-details" data-module="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">Supported components</span>
+           </summary>
+      <div class="govuk-details__text">
+			<table class="specTable">
+			<tr class="specHeader" style="font-weight:bold"><td>Component</td><td>Syntax</td><td>Notes</td></tr>
+			<tr class="specRow"><td>h1</td><td>h1|Text here</td><td></td></tr>
+			<tr class="specRow2"><td>h2</td><td>h2|Text here</td><td></td></tr>
+			<tr class="specRow"><td>h3</td><td>h3|Text here</td><td></td></tr>
+			<tr class="specRow2"><td>h4</td><td>h4|Text here</td><td></td></tr>
+			<tr class="specRow"><td>p</td><td>p|Text here</td><td>Can include styling and links</td></tr>
+			<tr class="specRow2"><td>a</td><td>a|Text here|href</td><td>Href can be full or relative</td></tr>
+			
+			<tr class="specRow"><td>input box</td><td>input|Label here:Hint text here</td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
+			<tr class="specRow2"><td>Textarea box</td><td>textarea|Label here:Hint text here</td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
+			<tr class="specRow"><td>date input</td><td>date|Label here</td><td></td></tr>
+			<tr class="specRow2"><td>radio buttons</td><td>radios|Label here:Hint text here|Radio 1|Radio 2|...final radio</td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
+			<tr class="specRow"><td>checkboxes</td><td>checkboxes|Label here|checkbox 1|checkbox 2|...final checkbox</td><td></td></tr>
+			<tr class="specRow2"><td>select</td><td>select|Label here|option 1|option 2|...final option<br>
+			<p></td><td></td></tr>
+			<tr class="specRow"><td>goback</td><td>goback|Text here</td><td>Text is optional, defaults to 'Back'</td></tr>
+			<tr class="specRow2"><td>button</td><td>button|Label here|font colour|background colour</td></td><td>Colours are optional, defaults to gov.uk primary button</td></tr>
+			<tr class="specRow"><td>button_p</td><td>button|Label here</td></td><td>gov.uk primary button</td></tr>
+			<tr class="specRow2"><td>button_s</td><td>button|Label here</td></td><td>gov.uk secondary button</td></tr>
+			
+			<tr class="specRow2"><td>details</td><td>details|Title here|content</td><td></td></tr>
+			<tr class="specRow"><td>inset</td><td>inset|Text here</td><td></td></tr>
+			<tr class="specRow2"><td>warning</td><td>warning|Text here</td><td></td></tr>
+			<tr class="specRow"><td>panel</td><td>panel|Title here|Description</td><td></td></tr>
+			<tr class="specRow2"><td>tag</td><td>tag|Text here</td><td></td></tr>
+			
+			<tr class="specRow"><td>listb</td><td>listb|item:item:item:item|spaced</td><td>Bulleted list, takes list items first. 'spaced' is optional, for bigger spacing between items</td></tr>
+			<tr class="specRow2"><td>listn</td><td>listn|item:item:item:item|spaced</td><td>Numbered list, takes list items first. 'spaced' is optional, for bigger spacing between items</td></tr>
+			<tr class="specRow"><td>summarylist</td><td>summarylist|Label|key1:value1|key2:value2|...final key:final value</td><td>Repeat as required</td></tr>
+			<tr class="specRow2"><td>table</td><td>table|Label|row1value1:row1value2:row1value3... row1value10|row2value1:row2value2:row2value3... row2value10</td><td>Repeat as required</td></tr>
+			<tr class="specRow"><td>tablewheader</td><td>tablewheader|row1value1:row1value2 etc.</td><td>As per table but first row is a header</td></tr>
+			<tr class="specRow2"><td>checkanswers</td><td>checkanswers|Label|key1:value1:link1|key2:value2:link2|...final key:final value:final link</td><td>Repeat as required. If link is left blank, it defaults to 'Change'</td></tr>
+			<tr class="specRow"><td>row</td><td>row</td><td>Use 'End Row' before defining a new row</td></tr>
+			<tr class="specRow2"><td>column</td><td>column|width</td><td>Width is optional, defaults to 100%. Columns can only exist within a row. Use 'End Column' before defining a new column.</td></tr>
+			<tr class="specRow"><td>hr</td><td>hr</td><td></td></tr>
+			<tr class="specRow2"><td>spacer</td><td>spacer|height|background color</td><td>Provides an empty div for cheeky padding. Colour is optional, defaults to transparent</td></tr>
+			<tr class="specRow"><td>comment</td><td>comment|Text here</td><td>Appears as a comment in the html, not visible to end users</td></tr>
+			</table>
+      </div>
+    </details>
+    
+    
+<!-- content suggestion on/off checkbox -->
+<div class="govuk-form-group">
+<div class="govuk-form-group">
+  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item govuk-checkboxes--small">
+      <input class="govuk-checkboxes__input govuk-checkboxes--small" id="show-suggestions" type="checkbox" checked>
+      <label class="govuk-label govuk-checkboxes__label" for="show-suggestions">
+        Show suggestions (type the component name without the ##)
+      </label>
+    </div>
+  </div>
+</div>
+  
+  
+<!--  actual scratchpad -->
+<textarea class="govuk-textarea" id="definition" rows="5"></textarea>
+</div>
+
+<!-- empty holder for typeahead, use <ul> as then easier to list results -->
+<ul id="typeahead-suggestions"
+    class="govuk-list"
+    style="margin-top:-30px;border:1px solid #b1b4b6; background-color:#f4f8fb;padding:8px; display:block; max-height:140px; overflow:auto;">
+</ul>
+
+
+<!-- build/copy controls -->
+<button id="buildBtn" class="govuk-button govuk-!-margin-top-3">
+  Build Page
+</button>
+&nbsp;&nbsp;
+<button id="copyBtn"
+        class="govuk-button govuk-button--secondary govuk-!-margin-top-3"
+        disabled>
+  Copy code to clipboard
+</button>
+
+<hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l" style="border-width:5px"/>
+
+<!-- generated page lives in div id 'output'-->
+<div id="output"></div>
+
+<!-- end of generated page -->
+
+<hr class='govuk-section-break govuk-section-break--visible govuk-section-break--l' style='border-width:5px'/>
+
+</div>
+
+
+<!-- footer -->
+<div class="govuk-footer">
+  <div class="govuk-width-container">
+    <svg
+      focusable="false"
+      role="presentation"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 64 60"
+      height="30"
+      width="32"
+      fill="currentcolor" class="govuk-footer__crown">
+      <g>
+        <circle cx="20" cy="17.6" r="3.7" />
+        <circle cx="10.2" cy="23.5" r="3.7" />
+        <circle cx="3.7" cy="33.2" r="3.7" />
+        <circle cx="31.7" cy="30.6" r="3.7" />
+        <circle cx="43.3" cy="17.6" r="3.7" />
+        <circle cx="53.2" cy="23.5" r="3.7" />
+        <circle cx="59.7" cy="33.2" r="3.7" />
+        <circle cx="31.7" cy="30.6" r="3.7" />
+        <path d="M33.1,9.8c.2-.1.3-.3.5-.5l4.6,2.4v-6.8l-4.6,1.5c-.1-.2-.3-.3-.5-.5l1.9-5.9h-6.7l1.9,5.9c-.2.1-.3.3-.5.5l-4.6-1.5v6.8l4.6-2.4c.1.2.3.3.5.5l-2.6,8c-.9,2.8,1.2,5.7,4.1,5.7h0c3,0,5.1-2.9,4.1-5.7l-2.6-8ZM37,37.9s-3.4,3.8-4.1,6.1c2.2,0,4.2-.5,6.4-2.8l-.7,8.5c-2-2.8-4.4-4.1-5.7-3.8.1,3.1.5,6.7,5.8,7.2,3.7.3,6.7-1.5,7-3.8.4-2.6-2-4.3-3.7-1.6-1.4-4.5,2.4-6.1,4.9-3.2-1.9-4.5-1.8-7.7,2.4-10.9,3,4,2.6,7.3-1.2,11.1,2.4-1.3,6.2,0,4,4.6-1.2-2.8-3.7-2.2-4.2.2-.3,1.7.7,3.7,3,4.2,1.9.3,4.7-.9,7-5.9-1.3,0-2.4.7-3.9,1.7l2.4-8c.6,2.3,1.4,3.7,2.2,4.5.6-1.6.5-2.8,0-5.3l5,1.8c-2.6,3.6-5.2,8.7-7.3,17.5-7.4-1.1-15.7-1.7-24.5-1.7h0c-8.8,0-17.1.6-24.5,1.7-2.1-8.9-4.7-13.9-7.3-17.5l5-1.8c-.5,2.5-.6,3.7,0,5.3.8-.8,1.6-2.3,2.2-4.5l2.4,8c-1.5-1-2.6-1.7-3.9-1.7,2.3,5,5.2,6.2,7,5.9,2.3-.4,3.3-2.4,3-4.2-.5-2.4-3-3.1-4.2-.2-2.2-4.6,1.6-6,4-4.6-3.7-3.7-4.2-7.1-1.2-11.1,4.2,3.2,4.3,6.4,2.4,10.9,2.5-2.8,6.3-1.3,4.9,3.2-1.8-2.7-4.1-1-3.7,1.6.3,2.3,3.3,4.1,7,3.8,5.4-.5,5.7-4.2,5.8-7.2-1.3-.2-3.7,1-5.7,3.8l-.7-8.5c2.2,2.3,4.2,2.7,6.4,2.8-.7-2.3-4.1-6.1-4.1-6.1h10.6,0Z" />
+      </g>
+    </svg>
+    <div class="govuk-footer__meta">
+      <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          class="govuk-footer__licence-logo"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 483.2 195.7"
+          height="17"
+          width="41">
+          <path
+            fill="currentColor"
+            d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145" />
+        </svg>
+        <span class="govuk-footer__licence-description">
+          All content is available under the
+          <a
+            class="govuk-footer__link"
+            href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+            rel="license">Open Government Licence v3.0</a>, except where otherwise stated
+        </span>
+      </div>
+      <div class="govuk-footer__meta-item">
+        <a
+          class="govuk-footer__link govuk-footer__copyright-logo"
+          href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">
+          © Crown copyright
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- scripts! -->
+<script type="module">
+const copyBtn = document.getElementById("copyBtn");
+
+import { initAll } from "https://unpkg.com/govuk-frontend@6.0.0/dist/govuk/govuk-frontend.min.js";
+initAll();
+
+// components and their code fragments, user content passed in via 'label' and 'opts'
+// add new component here but be careful!
+const COMPONENTS = {
+   
+  
+comment: (label) => `
+    <!-- ${label} -->
+`,
+ 
+
+  h1: (label) => `
+    <h1 class="govuk-heading-xl">${label}</h1>`,
+
+  h2: (label) => `
+    <h2 class="govuk-heading-l">${label}</h2>`,
+
+  h3: (label) => `
+    <h3 class="govuk-heading-m">${label}</h3>`,
+
+  h4: (label) => `
+    <h4 class="govuk-heading-s">${label}</h4>`,
+
+  p: (label) => `
+    <p class="govuk-body">${label}</p>`,
+    
+  a: (label,opts) => `
+    <p class="govuk-body"><a href="${opts[0]||""}" class="govuk-link">${label}</a></p>`,
+
+  hr: (label) => `
+    <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l"/>`,
+ 
+  spacer: (label, opts) => `
+    <div class="govuk-form-group" style="height:${label}px;background-color:${opts[0]||"transparent"}">
+      &nbsp;
+    </div>`, 
+       
+
+input: (label) => {
+const [main, hint] = label.split(":").map(s => s.trim());
+  return `
+    <div class="govuk-form-group">
+      <label class="govuk-label">${main}</label>
+      ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+      <input class="govuk-input" type="text">
+    </div>`;
+    },
+
+textarea: (label) => {
+const [main, hint] = label.split(":").map(s => s.trim());
+  return `
+    <div class="govuk-form-group">
+      <label class="govuk-label">${main}</label>
+      ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+       <textarea class="govuk-textarea"></textarea>
+    </div>`;
+    },
+
+
+
+date: (label) =>
+    `<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset" role="group" aria-describedby="passport-issued-hint">
+     <label class="govuk-label">${label}</label>
+    <div id="passport-issued-hint" class="govuk-hint">
+      For example, 27 3 2007
+    </div>
+    <div class="govuk-date-input" id="passport-issued">
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="passport-issued-day">
+            Day
+          </label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-day" name="passport-issued-day" type="text" inputmode="numeric">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="passport-issued-month">
+            Month
+          </label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-month" name="passport-issued-month" type="text" inputmode="numeric">
+        </div>
+      </div>
+      <div class="govuk-date-input__item">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-date-input__label" for="passport-issued-year">
+            Year
+          </label>
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="passport-issued-year" name="passport-issued-year" type="text" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>`,
+
+goback: (label) =>
+`<a href="#" class="govuk-back-link">${label||"Back"}</a>`,
+
+
+  button_p: (label) =>
+    `<button class="govuk-button" data-module="govuk-button">${label}</button>`,
+
+  button_s: (label) =>
+    `<button class="govuk-button govuk-button--secondary" data-module="govuk-button">${label}</button>`,
+
+  button: (label,opts) =>
+    `<button class="govuk-button" style="color:${opts[0]||"white"};background-color:${opts[1]||"#116F48"};"data-module="govuk-button">${label}</button>`,
+
+radios: (label, opts) => {
+ const [main, hint] = label.split(":").map(s => s.trim());
+  return `
+    <fieldset class="govuk-fieldset">
+     <label class="govuk-label">${main}</label>
+       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+      <div class="govuk-radios govuk-radios">
+        ${opts.map((o,i)=>`
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="${label}-${i}" name="${label}" type="radio" value="${o}">
+            <label class="govuk-label govuk-radios__label" for="${label}-${i}">${o}</label>
+          </div>`).join("")}
+      </div>
+    </fieldset>`;
+    },
+    
+
+//   radios: (label, opts) => `
+//     <fieldset class="govuk-fieldset">
+//       <legend class="govuk-fieldset__legend">${label}</legend>
+//       <div class="govuk-radios govuk-radios">
+//         ${opts.map((o,i)=>`
+//           <div class="govuk-radios__item">
+//             <input class="govuk-radios__input" id="${label}-${i}" name="${label}" type="radio" value="${o}">
+//             <label class="govuk-label govuk-radios__label" for="${label}-${i}">${o}</label>
+//           </div>`).join("")}
+//       </div>
+//     </fieldset>`,
+    
+
+  checkboxes: (label, opts) =>  {
+const [main, hint] = label.split(":").map(s => s.trim());
+  return `
+    <fieldset class="govuk-fieldset">
+      <label class="govuk-label">${main}</label>
+      ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+      <div class="govuk-checkboxes">
+        ${opts.map((o,i)=>`
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="${label}-${i}" type="checkbox" value="${o}">
+            <label class="govuk-label govuk-checkboxes__label" for="${label}-${i}">${o}</label>
+          </div>`).join("")}
+      </div>
+    </fieldset>`;
+    },
+
+
+  select: (label, opts) => {
+  const [main, hint] = label.split(":").map(s => s.trim());
+  return `
+    <div class="govuk-form-group">
+      <label class="govuk-label">${main}</label>
+    ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+        <select class="govuk-select">
+        ${opts.map(o => `<option>${o}</option>`).join("")}
+      </select>
+    </div>`;
+    },
+
+
+//   select: (label, opts) => `
+//     <div class="govuk-form-group">
+//       <label class="govuk-label">${label}</label>
+//       <select class="govuk-select">
+//         ${opts.map(o => `<option>${o}</option>`).join("")}
+//       </select>
+//     </div>`,
+
+  details: (label, opts) => `
+    <details class="govuk-details" data-module="govuk-details">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">${label}</span>
+      </summary>
+      <div class="govuk-details__text">${opts[0]||""}</div>
+    </details>`,
+
+  inset: (label) =>
+    `<div class="govuk-inset-text">${label}</div>`,
+
+  warning: (label) =>
+    `<div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">${label}</strong>
+    </div>`,
+
+  panel: (label, opts) =>
+    `<div class="govuk-panel govuk-panel--confirmation">
+      <h2 class="govuk-panel__title">${label}</h2>
+      <div class="govuk-panel__body">${opts[0]||""}</div>
+    </div>`,
+
+  tag: (label, opts) =>
+    `<strong class="govuk-tag govuk-tag--${opts[0]||"blue"}">${label}</strong>`,
+
+// summarylist - content rows delimited by |,  content within a row by :
+  summarylist: (label, opts) => `
+    <h3 class="govuk-heading-m">${label}</h3>
+    <dl class="govuk-summary-list">
+      ${opts.map(line => {
+        const [k,v] = line.split(":");
+        return `
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">${k}</dt>
+          <dd class="govuk-summary-list__value">${v}</dd>
+        </div>`;
+      }).join("")}
+    </dl>`,
+    
+
+listn: (str, opts) => {
+  const items = str.split(":");
+  const spacingClass = opts?.includes?.("spaced") ? " govuk-list--spaced" : "";
+  
+  const listItems = items
+    .map(item => `<li>${item}</li>`)
+    .join("\n");
+
+  return `
+    <ul class="govuk-list govuk-list--number${spacingClass}">
+      ${listItems}
+    </ul>
+  `;
+},
+
+listb: (str, opts) => {
+  const items = str.split(":");
+  const spacingClass = opts?.includes?.("spaced") ? " govuk-list--spaced" : "";
+  
+  const listItems = items
+    .map(item => `<li>${item}</li>`)
+    .join("\n");
+
+  return `
+    <ul class="govuk-list govuk-list--bullet${spacingClass}">
+      ${listItems}
+    </ul>
+  `;
+},
+
+// table - content rows delimited by |,  content within a row by :
+
+table: (label, opts) => `
+  <table class="govuk-table">
+    <caption class="govuk-table__caption govuk-table__caption--m">${label}</caption>
+    <tbody class="govuk-table__body">
+      ${opts
+        .map(line => {
+          const cells = line.split(":");   // split into however many items exist
+          return `
+          <tr class="govuk-table__row">
+            ${cells
+              .map(item => `<td class="govuk-table__cell">${item || " "}</td>`)
+              .join("")}
+          </tr>`;
+        })
+        .join("")}
+    </tbody>
+  </table>
+`,
+
+// table with first row as a header - other content rows delimited by |,  content within a row by :
+tablewheader: (label, opts) => `
+  <table class="govuk-table">
+    <caption class="govuk-table__caption govuk-table__caption--m">
+      ${label}
+    </caption>
+    <tbody class="govuk-table__body">
+      ${opts
+        .map((line, index) => {
+          const cells = line.split(":");
+
+          // First row = header, rest = standard row
+          const rowClass = index === 0
+            ? "govuk-table__header"
+            : "govuk-table__row";
+
+          return `
+          <tr class="${rowClass}">
+            ${cells
+              .map(item => `
+                <td class="govuk-table__cell">${item || " "}</td>
+              `)
+              .join("")}
+          </tr>`;
+        })
+        .join("")}
+    </tbody>
+  </table>
+`,
+
+// check your answers - content rows delimited by |,  content within a row by :
+
+checkanswers: (label, opts) => `
+    <h3 class="govuk-heading-m">${label}</h3>
+    <dl class="govuk-summary-list">
+      ${opts.map(line => {
+        const [k,v,l] = line.split(":");
+        return `
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">${k}</dt>
+          <dd class="govuk-summary-list__value">${v}</dd>
+          <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="#">${l || "Change"}</a>
+        </dd>
+        </div>`;
+      }).join("")}
+    </dl>
+    `
+};
+
+/* --- build the page --- */
+document.getElementById("buildBtn").addEventListener("click", buildPage);
+const output = document.getElementById("output");
+
+function buildPage() {
+  output.innerHTML = "";
+
+//   const lines = document.getElementById("definition")
+//     .value.split("##")
+//     .map(l => l.trim())
+//     .filter(l => l.length > 0);
+
+//remove all newlines and replace with <br>
+const sourceText = document.getElementById("definition").value.replace(/\r\n|\n|\r/g, "<br>");
+
+// split the result into separate entries using ## at the start of each line
+const lines = sourceText
+  .split("##")
+  .map(l => l.trim())
+  .filter(l => l.length > 0);
+
+  let currentRow = null;
+  let currentColumn = null;
+  let mwidth = null;
+
+  lines.forEach(line => {
+  
+//remove any <br> at the very end of a string, as we dont need it
+line = line.replace(/<br>$/, "");
+    /* ---- ROW START ---- */
+    if (line.toLowerCase() === "row") {
+      currentRow = document.createElement("div");
+      currentRow.className = "gov-row";
+      return;
+    }
+
+    /* ---- ROW END ---- */
+    if (line.toLowerCase() === "end row") {
+      if (currentRow) output.appendChild(currentRow);
+      currentRow = null;
+      return;
+    }
+
+    /* ---- COLUMN START ---- */
+    if (line.toLowerCase().startsWith("column|")) {
+    mwidth = line.split("|")[1];
+      if (mwidth == undefined){
+      mwidth = "100";
+      }
+      mwidth = Math.round(mwidth * 0.9);
+      currentColumn = document.createElement("div");
+      currentColumn.className = "gov-col";
+      currentColumn.style.flex = `0 0 ${mwidth}%`;
+      return;
+    }
+  /* ---- COLUMN START 2 ---- */
+    if (line.toLowerCase().startsWith("column")) {
+      const width = "90";
+       currentColumn = document.createElement("div");
+      currentColumn.className = "gov-col";
+      currentColumn.style.flex = `0 0 ${width}%`;
+      return;
+    }
+    
+    /* ---- COLUMN END ---- */
+    if (line.toLowerCase() === "end column") {
+      if (currentRow && currentColumn) currentRow.appendChild(currentColumn);
+      currentColumn = null;
+      return;
+    }
+
+    /* ---- COMPONENTS ---- */
+    // if its not a column of row, assume its a component
+    // each line via the delimiter |, where the first item is the label
+    // and any subsequent ones are options
+    // (repeating options e.g. table content is handled with a : in each component)
+    const parts = line.split("|").map(x => x.trim());
+    const type = parts[0].toLowerCase();
+    const label = parts[1] || "";
+    const options = parts.slice(2);
+
+    // call this function in a constant to go through every possible function,
+    // and add either the correct html or the error message
+    const html = COMPONENTS[type]
+      ? COMPONENTS[type](label, options)
+      : `<p class="govuk-body">Unknown component: ${type}</p>`;
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "component-block";
+    wrapper.innerHTML = html;
+
+    if (currentColumn) currentColumn.appendChild(wrapper);
+    else if (currentRow) currentRow.appendChild(wrapper);
+    else output.appendChild(wrapper);
+    
+    
+  });
+
+
+
+  initAll();
+  copyBtn.disabled = false; // enable copy button after build
+}
+
+copyBtn.addEventListener("click", () => {
+  // Copy ONLY the generated inner HTML (not the surrounding container)
+  const generatedHTML = output.innerHTML;
+  
+  
+const styleBlocks = Array.from(document.querySelectorAll("style"))
+    .map(style => style.outerHTML)
+    .join("\n\n");
+
+  // Combine styles + HTML
+  const combined = `${styleBlocks}\n\n<div>\n${generatedHTML}\n</div>`;
+
+
+  navigator.clipboard.writeText(combined).then(() => {
+    const original = copyBtn.textContent;
+    copyBtn.textContent = "Copied!";
+
+    setTimeout(() => {
+      copyBtn.textContent = original;
+    }, 2000);
+  });
+});
+</script>
+<script>
+
+
+
+(function () {
+
+  // type ahead suggestions, if you add a new component above, please include it here 
+  const suggList = `
+h1|Text here
+h2|Text here
+h3|Text here
+h4|Text here
+p|Text here
+a|Text here|href
+input|Label here: Optional hint 
+textarea|Label here: Optional hint 
+date|Label here
+radios|Label here: Optional hint |Radio 1|Radio 2 |...final radio
+checkboxes|Label here: Optional hint|checkbox 1|checkbox 2|...final checkbox
+select|Label here|option 1|option 2|...final option
+goback
+goback|Text here
+button|Label here|font colour|background colour
+button_p|Label here
+button_s|Label here
+details|Title here |content
+inset|Text here
+warning|Text here
+panel|Title here|Description
+tag|Text here
+listb|item:item:item:item |spaced
+listn|item:item:item:item|spaced
+summarylist|Label|key1:value1|key2:value2|...final key:final value
+table|Label|row1value1:row1value2:row1value3... row1value10|row2value1:row2value2:row2value3... row2value10 |tablewheader|row1value1:row1value2 etc.
+checkanswers|Label|key1:value1:link1|key2:value2:link2|...final key:final value:final link
+row
+end row
+column
+column|width
+end column
+hr
+spacer|height|background color
+comment|Text here 
+`.trim();
+
+  const suggestions = suggList
+    .split("\n")
+    .map(l => l.replace(/\r$/, ""))
+    .filter(l => l.trim().length > 0);
+
+  const textarea = document.getElementById("definition");
+  const checkbox = document.getElementById("show-suggestions");
+  const suggestionBox = document.getElementById("typeahead-suggestions");
+
+  let selectedIndex = -1; // for keyboard navigation
+
+  // -- Token Handling --
+
+  function getTokenBounds(text, caret) {
+    const isWS = c => c === " " || c === "\t" || c === "\n" || c === "\r";
+
+    let start = caret;
+    let end = caret;
+
+    if (caret > 0 && isWS(text[caret - 1])) {
+      return { start: caret, end: caret };
+    }
+
+    while (start > 0 && !isWS(text[start - 1])) start--;
+    while (end < text.length && !isWS(text[end])) end++;
+
+    return { start, end };
+  }
+
+  function getCurrentToken(area) {
+    const text = area.value;
+    const caret = area.selectionStart;
+    const { start, end } = getTokenBounds(text, caret);
+    return {
+      token: text.slice(start, end),
+      start,
+      end
+    };
+  }
+
+  // --- Suggestion Rendering ----
+
+  function updateSuggestions() {
+    if (!checkbox.checked) {
+      suggestionBox.style.display = "none";
+      return;
+    }
+
+    const { token } = getCurrentToken(textarea);
+    const q = token.toLowerCase();
+    if (!q.length) {
+      suggestionBox.style.display = "none";
+      return;
+    }
+
+    const matches = suggestions.filter(s =>
+      s.toLowerCase().startsWith(q)
+    );
+
+    selectedIndex = -1; // reset selection
+
+    suggestionBox.innerHTML = matches
+      .map((m, i) =>
+        `<li class="suggestion-item" data-index="${i}" 
+             style="cursor:pointer; padding:2px 4px;">
+           ${m}
+         </li>`
+      )
+      .join("");
+
+    suggestionBox.style.display = matches.length ? "block" : "none";
+  }
+
+  function highlightSelection() {
+    const items = suggestionBox.querySelectorAll(".suggestion-item");
+    items.forEach(i => i.style.background = "white");
+
+    if (selectedIndex >= 0 && selectedIndex < items.length) {
+      items[selectedIndex].style.background = "#e0e0e0";
+    }
+  }
+
+  // --- add the Suggestion at the insert point 
+
+  function insertSuggestion(suggestion) {
+    const text = textarea.value;
+    const caret = textarea.selectionStart;
+
+    const { start, end } = getTokenBounds(text, caret);
+
+    const before = text.slice(0, start);
+    const after = text.slice(end);
+
+    const newValue = before + "##" + suggestion + after;
+    textarea.value = newValue;
+
+    const newCaret = before.length + suggestion.length + 2;
+    textarea.setSelectionRange(newCaret, newCaret);
+  }
+
+  // make it respond to arrow keys, return and mouse
+
+  textarea.addEventListener("input", updateSuggestions);
+  textarea.addEventListener("click", updateSuggestions);
+  textarea.addEventListener("keyup", (e) => {
+    const navKeys = ["ArrowLeft", "ArrowRight", "Home", "End"];
+    if (navKeys.includes(e.key)) updateSuggestions();
+  });
+
+  // Keyboard navigation
+  textarea.addEventListener("keydown", (e) => {
+    const items = suggestionBox.querySelectorAll(".suggestion-item");
+    const count = items.length;
+
+    if (suggestionBox.style.display !== "block" || count === 0) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      selectedIndex = (selectedIndex + 1) % count;
+      highlightSelection();
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      selectedIndex = (selectedIndex - 1 + count) % count;
+      highlightSelection();
+    }
+
+    if (e.key === "Enter" && selectedIndex >= 0) {
+      e.preventDefault();
+      const suggestion = items[selectedIndex].innerText;
+      insertSuggestion(suggestion);
+      suggestionBox.style.display = "none";
+    }
+
+    if (e.key === "Escape") {
+      suggestionBox.style.display = "none";
+    }
+  });
+
+  // Mouse click on suggestion
+  suggestionBox.addEventListener("click", e => {
+    if (!e.target.classList.contains("suggestion-item")) return;
+    insertSuggestion(e.target.innerText);
+    suggestionBox.style.display = "none";
+  });
+
+  // Checkbox toggle
+  checkbox.addEventListener("change", () => {
+    if (!checkbox.checked) {
+      suggestionBox.style.display = "none";
+    } else {
+      updateSuggestions();
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
