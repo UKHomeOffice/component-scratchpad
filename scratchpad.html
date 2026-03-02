@@ -347,6 +347,7 @@ goback: (label) =>
 radios: (label, opts) => {
  const [main, hint] = label.split(":").map(s => s.trim());
   return `
+  <div class="govuk-form-group">
     <fieldset class="govuk-fieldset">
      <label class="govuk-label">${main}</label>
        ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
@@ -357,7 +358,8 @@ radios: (label, opts) => {
             <label class="govuk-label govuk-radios__label" for="${label}-${i}">${o}</label>
           </div>`).join("")}
       </div>
-    </fieldset>`;
+    </fieldset>
+    </div>`;
     },
     
 
@@ -365,6 +367,7 @@ radios: (label, opts) => {
   checkboxes: (label, opts) =>  {
 const [main, hint] = label.split(":").map(s => s.trim());
   return `
+  <div class="govuk-form-group">
     <fieldset class="govuk-fieldset">
       <label class="govuk-label">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
@@ -375,7 +378,8 @@ const [main, hint] = label.split(":").map(s => s.trim());
             <label class="govuk-label govuk-checkboxes__label" for="${label}-${i}">${o}</label>
           </div>`).join("")}
       </div>
-    </fieldset>`;
+    </fieldset>
+     </div>`;
     },
 
 
