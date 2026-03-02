@@ -1,14 +1,15 @@
 # component-scratchpad
 A markdown-style syntax to describe gov.uk components and generate html code to copy into non-live and non-public projects
 
-# Original file and repo created 2nd March 2026 by Ian Smith.
+Original file and repo created 2nd March 2026 by Ian Smith.
 
 Use this tool to quickly create html content for pages based on gov.uk components.
 
 Instead of writing html code, users describe each component using (relatively) plain language.
 
-Each new component description must start with ##. The format is:
-##component_name | Label or text | Further options
+Each new component description must start with ##. 
+
+The format is: ##component_name | Label or text | Further options
 
 Returns are allowed so you can write multiple paragraphs of content, e.g.
 ##p | This is simple paragraph of text.
