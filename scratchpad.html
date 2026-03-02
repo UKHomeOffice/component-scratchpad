@@ -90,16 +90,16 @@ Original version Feb 27th, 2026 by Ian Smith.
 			<tr class="specRow2"><td>a</td><td>a|Text here|href</td><td>Href can be full or relative</td></tr>
 			
 			<tr class="specRow"><td>input box</td><td>input|Label here:Hint text here</td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
-			<tr class="specRow2"><td>Textarea box</td><td>textarea|Label here:Hint text here</td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
+			<tr class="specRow2"><td>textarea</td><td>textarea|Label here:Hint text here</td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
 			<tr class="specRow"><td>date input</td><td>date|Label here</td><td></td></tr>
 			<tr class="specRow2"><td>radio buttons</td><td>radios|Label here:Hint text here|Radio 1|Radio 2|...final radio</td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
 			<tr class="specRow"><td>checkboxes</td><td>checkboxes|Label here:Hint text here|checkbox 1|checkbox 2|...final checkbox</td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
 			<tr class="specRow2"><td>select</td><td>select|Label here:Hint text here|option 1|option 2|...final option<br>
 			<p></td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
-			<tr class="specRow"><td>goback</td><td>goback|Text here</td><td>Text is optional, defaults to 'Back'</td></tr>
+			<tr class="specRow"><td>go back link</td><td>goback|Text here</td><td>Text is optional, defaults to 'Back'</td></tr>
 			<tr class="specRow2"><td>button</td><td>button|Label here|font colour|background colour</td></td><td>Colours are optional, defaults to gov.uk primary button</td></tr>
-			<tr class="specRow"><td>button_p</td><td>button|Label here</td></td><td>gov.uk primary button</td></tr>
-			<tr class="specRow2"><td>button_s</td><td>button|Label here</td></td><td>gov.uk secondary button</td></tr>
+			<tr class="specRow"><td>primary button</td><td>button_p|Label here</td></td><td>gov.uk primary button</td></tr>
+			<tr class="specRow2"><td>secondary button</td><td>button_s|Label here</td></td><td>gov.uk secondary button</td></tr>
 			
 			<tr class="specRow2"><td>details</td><td>details|Title here|content</td><td></td></tr>
 			<tr class="specRow"><td>inset</td><td>inset|Text here</td><td></td></tr>
@@ -107,12 +107,12 @@ Original version Feb 27th, 2026 by Ian Smith.
 			<tr class="specRow"><td>panel</td><td>panel|Title here|Description</td><td></td></tr>
 			<tr class="specRow2"><td>tag</td><td>tag|Text here</td><td></td></tr>
 			
-			<tr class="specRow"><td>listb</td><td>listb|item:item:item:item|spaced</td><td>Bulleted list, takes list items first. 'spaced' is optional, for bigger spacing between items</td></tr>
-			<tr class="specRow2"><td>listn</td><td>listn|item:item:item:item|spaced</td><td>Numbered list, takes list items first. 'spaced' is optional, for bigger spacing between items</td></tr>
-			<tr class="specRow"><td>summarylist</td><td>summarylist|Label|key1:value1|key2:value2|...final key:final value</td><td>Repeat as required</td></tr>
+			<tr class="specRow"><td>bullet list</td><td>listb|item:item:item:item|spaced</td><td>Bulleted list, takes list items first. 'spaced' is optional, for bigger spacing between items</td></tr>
+			<tr class="specRow2"><td>number list</td><td>listn|item:item:item:item|spaced</td><td>Numbered list, takes list items first. 'spaced' is optional, for bigger spacing between items</td></tr>
+			<tr class="specRow"><td>summary list</td><td>summarylist|Label|key1:value1|key2:value2|...final key:final value</td><td>Repeat as required</td></tr>
 			<tr class="specRow2"><td>table</td><td>table|Label|row1value1:row1value2:row1value3... row1value10|row2value1:row2value2:row2value3... row2value10</td><td>Repeat as required</td></tr>
-			<tr class="specRow"><td>tablewheader</td><td>tablewheader|row1value1:row1value2 etc.</td><td>As per table but first row is a header</td></tr>
-			<tr class="specRow2"><td>checkanswers</td><td>checkanswers|Label|key1:value1:link1|key2:value2:link2|...final key:final value:final link</td><td>Repeat as required. If link is left blank, it defaults to 'Change'</td></tr>
+			<tr class="specRow"><td>table with header</td><td>tablewheader|Label|row1value1:row1value2:row1value3... row1value10|row2value1:row2value2:row2value3... row2value10</td><td>As per table but first row is a header</td></tr>
+			<tr class="specRow2"><td>check answers</td><td>checkanswers|Label|key1:value1:link1|key2:value2:link2|...final key:final value:final link</td><td>Repeat as required. If link is left blank, it defaults to 'Change'</td></tr>
 			<tr class="specRow"><td>row</td><td>row</td><td>Use 'End Row' before defining a new row</td></tr>
 			<tr class="specRow2"><td>column</td><td>column|width</td><td>Width is optional, defaults to 100%. Columns can only exist within a row. Use 'End Column' before defining a new column.</td></tr>
 			<tr class="specRow"><td>hr</td><td>hr</td><td></td></tr>
@@ -700,7 +700,8 @@ tag|Text here
 listb|item:item:item:item |spaced
 listn|item:item:item:item|spaced
 summarylist|Label|key1:value1|key2:value2|...final key:final value
-table|Label|row1value1:row1value2:row1value3... row1value10|row2value1:row2value2:row2value3... row2value10 |tablewheader|row1value1:row1value2 etc.
+table|Label|row1value1:row1value2:row1value3... row1value10|row2value1:row2value2:row2value3... row2value10 |
+tablewheader|Label|row1value1:row1value2:row1value3... row1value10|row2value1:row2value2:row2value3... row2value10 |
 checkanswers|Label|key1:value1:link1|key2:value2:link2|...final key:final value:final link
 row
 end row
