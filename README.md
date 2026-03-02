@@ -1,7 +1,7 @@
 # component-scratchpad
 A markdown-style syntax to describe gov.uk components and generate html code to copy into non-live and non-public projects
 
-Original created 2nd March 2026 by Ian Smith.
+# Original file and repo created 2nd March 2026 by Ian Smith.
 
 Use this tool to quickly create html content for pages based on gov.uk components.
 
