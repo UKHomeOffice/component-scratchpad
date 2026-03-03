@@ -89,13 +89,13 @@ Original version Feb 27th, 2026 by Ian Smith.
 			<tr class="specRow"><td>p</td><td>p|Text here</td><td>Can include styling and links</td></tr>
 			<tr class="specRow2"><td>a</td><td>a|Text here|href</td><td>Href can be full or relative</td></tr>
 			
-			<tr class="specRow"><td>input box</td><td>input|Label here:Hint text here</td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
-			<tr class="specRow2"><td>textarea</td><td>textarea|Label here:Hint text here</td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
+			<tr class="specRow"><td>input box</td><td>input|Label here (Optional hint)</td><td>Hint text is optional, defined within brackets</td></tr>
+			<tr class="specRow2"><td>textarea</td><td>textarea|Label here (Optional hint)</td><td>Hint text is optional, defined within brackets</td></tr>
 			<tr class="specRow"><td>date input</td><td>date|Label here</td><td></td></tr>
-			<tr class="specRow2"><td>radio buttons</td><td>radios|Label here:Hint text here|Radio 1|Radio 2|...final radio</td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
-			<tr class="specRow"><td>checkboxes</td><td>checkboxes|Label here:Hint text here|checkbox 1|checkbox 2|...final checkbox</td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
-			<tr class="specRow2"><td>select</td><td>select|Label here:Hint text here|option 1|option 2|...final option<br>
-			<p></td><td>Hint text is optional, defined after a colon (&colon;)</td></tr>
+			<tr class="specRow2"><td>radio buttons</td><td>radios|Label here (Optional hint)|Radio 1|Radio 2|...final radio</td><td>Hint text is optional, defined within brackets</td></tr>
+			<tr class="specRow"><td>checkboxes</td><td>checkboxes|Label here (Optional hint)|checkbox 1|checkbox 2|...final checkbox</td><td>Hint text is optional, defined within brackets</td></tr>
+			<tr class="specRow2"><td>select</td><td>select|Label here (Optional hint)|option 1|option 2|...final option<br>
+			<p></td><td>Hint text is optional, defined within brackets</td></tr>
 			<tr class="specRow"><td>go back link</td><td>goback|Text here</td><td>Text is optional, defaults to 'Back'</td></tr>
 			<tr class="specRow2"><td>button</td><td>button|Label here|font colour|background colour</td></td><td>Colours are optional, defaults to gov.uk primary button</td></tr>
 			<tr class="specRow"><td>primary button</td><td>button_p|Label here</td></td><td>gov.uk primary button</td></tr>
@@ -274,7 +274,12 @@ comment: (label) => `
        
 
 input: (label) => {
-const [main, hint] = label.split(":").map(s => s.trim());
+//const [main, hint] = label.split(":").map(s => s.trim());
+
+const [rawMain, rawHint] = label.split("(");
+const main = rawMain.trim();
+const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+
   return `
     <div class="govuk-form-group">
       <label class="govuk-label">${main}</label>
@@ -284,7 +289,10 @@ const [main, hint] = label.split(":").map(s => s.trim());
     },
 
 textarea: (label) => {
-const [main, hint] = label.split(":").map(s => s.trim());
+const [rawMain, rawHint] = label.split("(");
+const main = rawMain.trim();
+const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+
   return `
     <div class="govuk-form-group">
       <label class="govuk-label">${main}</label>
@@ -345,7 +353,9 @@ goback: (label) =>
     `<button class="govuk-button" style="color:${opts[0]||"white"};background-color:${opts[1]||"#116F48"};"data-module="govuk-button">${label}</button>`,
 
 radios: (label, opts) => {
- const [main, hint] = label.split(":").map(s => s.trim());
+ const [rawMain, rawHint] = label.split("(");
+const main = rawMain.trim();
+const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
   return `
   <div class="govuk-form-group">
     <fieldset class="govuk-fieldset">
@@ -365,7 +375,9 @@ radios: (label, opts) => {
 
 
   checkboxes: (label, opts) =>  {
-const [main, hint] = label.split(":").map(s => s.trim());
+const [rawMain, rawHint] = label.split("(");
+const main = rawMain.trim();
+const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
   return `
   <div class="govuk-form-group">
     <fieldset class="govuk-fieldset">
@@ -384,7 +396,9 @@ const [main, hint] = label.split(":").map(s => s.trim());
 
 
   select: (label, opts) => {
-  const [main, hint] = label.split(":").map(s => s.trim());
+const [rawMain, rawHint] = label.split("(");
+const main = rawMain.trim();
+const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
   return `
     <div class="govuk-form-group">
       <label class="govuk-label">${main}</label>
@@ -681,12 +695,12 @@ h3|Text here
 h4|Text here
 p|Text here
 a|Text here|href
-input|Label here: Optional hint 
-textarea|Label here: Optional hint 
+input|Label here (Optional hint)
+textarea|Label here (Optional hint)
 date|Label here
-radios|Label here: Optional hint |Radio 1|Radio 2 |...final radio
-checkboxes|Label here: Optional hint|checkbox 1|checkbox 2|...final checkbox
-select|Label here: Optional hint|option 1|option 2|...final option
+radios|Label here (Optional hint) |Radio 1|Radio 2 |...final radio
+checkboxes|Label here (Optional hint)|checkbox 1|checkbox 2|...final checkbox
+select|Label here (Optional hint)|option 1|option 2|...final option
 goback
 goback|Text here
 button|Label here|font colour|background colour
