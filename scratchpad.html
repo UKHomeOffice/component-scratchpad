@@ -113,6 +113,7 @@ Original version Feb 27th, 2026 by Ian Smith.
 			<tr class="specRow2"><td>table</td><td>table|Label|row1value1:row1value2:row1value3... row1value10|row2value1:row2value2:row2value3... row2value10</td><td>Repeat as required</td></tr>
 			<tr class="specRow"><td>table with header</td><td>tablewheader|Label|row1value1:row1value2:row1value3... row1value10|row2value1:row2value2:row2value3... row2value10</td><td>As per table but first row is a header</td></tr>
 			<tr class="specRow2"><td>check answers</td><td>checkanswers|Label|key1:value1:link1|key2:value2:link2|...final key:final value:final link</td><td>Repeat as required. If link is left blank, it defaults to 'Change'</td></tr>
+			<tr class="specRow2"><td>task list</td><td>tasklist|Label|Task name1:URL:status|Task name2:URL:status..final task name: url:status</td><td>Repeat as required. Status of 'Completed' is shown without a tag. Status of 'Cannot be started' removes link from task name.</td></tr>
 			<tr class="specRow"><td>row</td><td>row</td><td>Use 'End Row' before defining a new row</td></tr>
 			<tr class="specRow2"><td>column</td><td>column|width</td><td>Width is optional, defaults to 100%. Columns can only exist within a row. Use 'End Column' before defining a new column.</td></tr>
 			<tr class="specRow"><td>hr</td><td>hr</td><td></td></tr>
@@ -550,7 +551,37 @@ checkanswers: (label, opts) => `
         </div>`;
       }).join("")}
     </dl>
-    `
+    `,
+
+// task list, based on checkanswers - content rows delimited by |,  content within a row by :
+
+tasklist: (label, opts) => `
+    <h3 class="govuk-heading-m">${label}</h3>
+    <ul class="govuk-task-list">
+          
+       ${opts.map(line => {
+
+        const [m,h,s] = line.split(":");
+        const [mainTitle, mainHint] = m.split("(");
+const main = mainTitle.trim();
+const hint = mainHint ? mainHint.replace(/\)$/, "").trim() : "";
+const status = s.trim();
+        return `
+        <li class="govuk-task-list__item govuk-task-list__item--with-link">
+    <div class="govuk-task-list__name-and-hint">
+    ${status === 'Cannot be started' ? main : `<a class="govuk-link govuk-task-list__link" href="${h||"#"}">${main}</a>`}
+     <div id="${label}" class="govuk-task-list__hint">
+        ${hint}
+      </div>
+       </div>
+    <div class="govuk-task-list__status" id="${label}-status">    
+${status === 'Completed' ? status : `<strong class="govuk-tag govuk-tag--blue">${status}</strong>`}
+
+    </div>
+     </li>`;
+      }).join("")}    
+    </ul>`
+//  end of components   
 };
 
 /* --- build the page --- */
