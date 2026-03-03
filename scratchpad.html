@@ -374,7 +374,7 @@ const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
     
 
 
-  checkboxes: (label, opts) =>  {
+checkboxes: (label, opts) =>  {
 const [rawMain, rawHint] = label.split("(");
 const main = rawMain.trim();
 const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
@@ -395,7 +395,7 @@ const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
     },
 
 
-  select: (label, opts) => {
+select: (label, opts) => {
 const [rawMain, rawHint] = label.split("(");
 const main = rawMain.trim();
 const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
@@ -408,7 +408,6 @@ const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
       </select>
     </div>`;
     },
-
 
 
 
