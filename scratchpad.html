@@ -687,10 +687,19 @@ line = line.replace(/<br>$/, "");
     const wrapper = document.createElement("div");
     wrapper.className = "component-block";
     wrapper.innerHTML = html;
+    
 
-    if (currentColumn) currentColumn.appendChild(wrapper);
-    else if (currentRow) currentRow.appendChild(wrapper);
-    else output.appendChild(wrapper);
+
+if (currentColumn) {
+    currentColumn.appendChild(wrapper);
+    currentColumn.appendChild(document.createTextNode("\n"));
+} else if (currentRow) {
+    currentRow.appendChild(wrapper);
+    currentRow.appendChild(document.createTextNode("\n"));
+} else {
+    output.appendChild(wrapper);
+    output.appendChild(document.createTextNode("\n"));
+}
     
     
   });
