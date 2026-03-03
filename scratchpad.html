@@ -90,7 +90,7 @@ Original version Feb 27th, 2026 by Ian Smith.
 			<tr class="specRow2"><td>a</td><td>a|Text here|href</td><td>Href can be full or relative</td></tr>
 			
 			<tr class="specRow"><td>input box</td><td>input|Label here (Optional hint)</td><td>Hint text is optional, defined within brackets</td></tr>
-			<tr class="specRow2"><td>textarea</td><td>textarea|Label here (Optional hint)</td><td>Hint text is optional, defined within brackets</td></tr>
+			<tr class="specRow2"><td>textarea</td><td>textarea|Label here (Optional hint)|Num. of rows</td><td>Hint text is optional, defined within brackets. Number of rows is optional, defaults to 3.</td></tr>
 			<tr class="specRow"><td>date input</td><td>date|Label here</td><td></td></tr>
 			<tr class="specRow2"><td>radio buttons</td><td>radios|Label here (Optional hint)|Radio 1|Radio 2|...final radio</td><td>Hint text is optional, defined within brackets</td></tr>
 			<tr class="specRow"><td>checkboxes</td><td>checkboxes|Label here (Optional hint)|checkbox 1|checkbox 2|...final checkbox</td><td>Hint text is optional, defined within brackets</td></tr>
@@ -289,7 +289,7 @@ const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
     </div>`;
     },
 
-textarea: (label) => {
+textarea: (label,opts) => {
 const [rawMain, rawHint] = label.split("(");
 const main = rawMain.trim();
 const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
@@ -298,7 +298,7 @@ const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
     <div class="govuk-form-group">
       <label class="govuk-label">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-       <textarea class="govuk-textarea"></textarea>
+       <textarea class="govuk-textarea" rows="${opts[0]||"3"}"></textarea>
     </div>`;
     },
 
@@ -739,7 +739,7 @@ h4|Text here
 p|Text here
 a|Text here|href
 input|Label here (Optional hint)
-textarea|Label here (Optional hint)
+textarea|Label here (Optional hint)|Rows
 date|Label here
 radios|Label here (Optional hint) |Radio 1|Radio 2 |...final radio
 checkboxes|Label here (Optional hint)|checkbox 1|checkbox 2|...final checkbox
