@@ -242,9 +242,9 @@ initAll();
 const COMPONENTS = {
    
   
-comment: (label) => `
-    <!-- ${label} -->
-`,
+// comment: (label) => `
+//     <!-- ${label} -->
+// `,
  
 
   h1: (label) => `
@@ -655,8 +655,21 @@ line = line.replace(/<br>$/, "");
       return;
     }
 
+
+  /* ---- comment ---- */
+    if (line.toLowerCase().startsWith("comment")) {
+        const myComment = document.createComment(line.split("|")[1]);
+       output.appendChild(document.createTextNode("\n"));
+  	 output.appendChild(myComment);
+   	output.appendChild(document.createTextNode("\n"));
+      return;
+    }
+
+
+
+
     /* ---- COMPONENTS ---- */
-    // if its not a column of row, assume its a component
+    // if its not a column, row or comment, assume its a component
     // each line via the delimiter |, where the first item is the label
     // and any subsequent ones are options
     // (repeating options e.g. table content is handled with a : in each component)
