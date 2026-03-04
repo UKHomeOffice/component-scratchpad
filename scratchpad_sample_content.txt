@@ -2,9 +2,13 @@
 ##goback
 ##h1|Welcome to this auto-generated page|Example content
 ##h2|What's this all about then? (this is a h2)
-##p|This layout has been generated using the content description at the top of the page. This component is a paragraph. It can contain multiple lines, like this (borrowed from gov.uk):
+##p|This layout has been generated using the content description at the top of the page. 
 
-Components are reusable parts of a user interface. Using pre-built, core elements allows government teams to build consistent services.
+This component is part of a paragraph. It can contain multiple lines, like this.
+
+Another component type is inset:
+
+##inset|Components are reusable parts of a user interface. Using pre-built, core elements allows government teams to build consistent services.
 
 You can also use the individual components in different patterns and contexts. For example, you can use the Text input component to ask for an email address, a National Insurance number or someone’s name.
 
