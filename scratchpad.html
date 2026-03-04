@@ -80,16 +80,16 @@ Original version Feb 27th, 2026 by Ian Smith.
       <div class="govuk-details__text">
 			<table class="specTable">
 			<tr class="specHeader" style="font-weight:bold"><td>Component</td><td>Syntax</td><td>Notes</td></tr>
-			<tr class="specRow"><td>h1</td><td>h1|Text here</td><td></td></tr>
-			<tr class="specRow2"><td>h2</td><td>h2|Text here</td><td></td></tr>
-			<tr class="specRow"><td>h3</td><td>h3|Text here</td><td></td></tr>
+			<tr class="specRow"><td>h1</td><td>h1|Text here|Caption</td><td>Caption is optional</td></tr>
+			<tr class="specRow2"><td>h2</td><td>h2|Text here|Caption</td><td>Caption is optional</td></tr>
+			<tr class="specRow"><td>h3</td><td>h3|Text here|Caption</td><td>Caption is optional</td></tr>
 			<tr class="specRow2"><td>h4</td><td>h4|Text here</td><td></td></tr>
 			<tr class="specRow"><td>p</td><td>p|Text here</td><td>Can include styling and links</td></tr>
 			<tr class="specRow2"><td>a</td><td>a|Text here|href</td><td>Href can be full or relative</td></tr>
 			
 			<tr class="specRow"><td>input box</td><td>input|Label here (Optional hint)</td><td>Hint text is optional, defined within brackets</td></tr>
 			<tr class="specRow2"><td>textarea</td><td>textarea|Label here (Optional hint)|Num. of rows</td><td>Hint text is optional, defined within brackets. Number of rows is optional, defaults to 3.</td></tr>
-			<tr class="specRow"><td>date input</td><td>date|Label here</td><td></td></tr>
+			<tr class="specRow"><td>date input</td><td>date|Label here (Optional hint)</td><td>Hint text is optional, defined within brackets.</td></tr>
 			<tr class="specRow2"><td>radio buttons</td><td>radios|Label here (Optional hint)|Radio 1|Radio 2|...final radio</td><td>Hint text is optional, defined within brackets</td></tr>
 			<tr class="specRow"><td>checkboxes</td><td>checkboxes|Label here (Optional hint)|checkbox 1|checkbox 2|...final checkbox</td><td>Hint text is optional, defined within brackets</td></tr>
 			<tr class="specRow2"><td>select</td><td>select|Label here (Optional hint)|option 1|option 2|...final option<br>
@@ -241,22 +241,21 @@ initAll();
 const COMPONENTS = {
    
   
-// comment: (label) => `
-//     <!-- ${label} -->
-// `,
- 
+// h1,h2,h3 all have optional caption
+  h1: (label,opts) => `
+   ${opts[0] ? `<span class="govuk-caption-xl">${opts[0]}</span>` : ""}
+    <h1 class="govuk-heading-xl" style="color:${opts[0]||"black"}">${label}</h1>`,
 
-  h1: (label) => `
-    <h1 class="govuk-heading-xl">${label}</h1>`,
-
-  h2: (label) => `
+  h2: (label,opts) => `
+  ${opts[0] ? `<span class="govuk-caption-l">${opts[0]}</span>` : ""}
     <h2 class="govuk-heading-l">${label}</h2>`,
 
-  h3: (label) => `
+  h3: (label,opts) => `
+  ${opts[0] ? `<span class="govuk-caption-m">${opts[0]}</span>` : ""}
     <h3 class="govuk-heading-m">${label}</h3>`,
 
   h4: (label) => `
-    <h4 class="govuk-heading-s">${label}</h4>`,
+     <h4 class="govuk-heading-s">${label}</h4>`,
 
   p: (label) => `
     <p class="govuk-body">${label}</p>`,
@@ -303,13 +302,16 @@ const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
 
 
 
-date: (label) =>
-    `<div class="govuk-form-group">
+date: (label,opts) => {
+ const [rawMain, rawHint] = label.split("(");
+const main = rawMain.trim();
+const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+
+return`
+<div class="govuk-form-group">
   <fieldset class="govuk-fieldset" role="group" aria-describedby="passport-issued-hint">
-     <label class="govuk-label">${label}</label>
-    <div id="passport-issued-hint" class="govuk-hint">
-      For example, 27 3 2007
-    </div>
+     <label class="govuk-label">${main}</label>
+      ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
     <div class="govuk-date-input" id="passport-issued">
       <div class="govuk-date-input__item">
         <div class="govuk-form-group">
@@ -337,7 +339,8 @@ date: (label) =>
       </div>
     </div>
   </fieldset>
-</div>`,
+</div>`;
+},
 
 goback: (label) =>
 `<a href="#" class="govuk-back-link">${label||"Back"}</a>`,
@@ -777,15 +780,15 @@ const styleBlocks = Array.from(document.querySelectorAll("style"))
 
   // type ahead suggestions, if you add a new component above, please include it here 
   const suggList = `
-h1|Text here
-h2|Text here
-h3|Text here
+h1|Text here|Caption
+h2|Text here|Caption
+h3|Text here|Caption
 h4|Text here
 p|Text here
 a|Text here|href
 input|Label here (Optional hint)
 textarea|Label here (Optional hint)|Rows
-date|Label here
+date|Label here (Optional hint)
 radios|Label here (Optional hint) |Radio 1|Radio 2 |...final radio
 checkboxes|Label here (Optional hint)|checkbox 1|checkbox 2|...final checkbox
 select|Label here (Optional hint)|option 1|option 2|...final option

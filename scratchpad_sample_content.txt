@@ -1,15 +1,15 @@
 ##comment|Paste this whole document into the input area and hit 'build page' to see all the components as of 4 March 2026. This first line is a comment and will not be visible on-screen (but will appear as a comment in the code).
 ##goback
-##h1|Welcome to this auto-generated page
+##h1|Welcome to this auto-generated page|Example content
 ##h2|What's this all about then? (this is a h2)
-##p|This layout has been generated using the content description at the top of the page. This component is a paragraph. It can contain multiple lines, like this:
+##p|This layout has been generated using the content description at the top of the page. This component is a paragraph. It can contain multiple lines, like this (borrowed from gov.uk):
 
 Components are reusable parts of a user interface. Using pre-built, core elements allows government teams to build consistent services.
 
 You can also use the individual components in different patterns and contexts. For example, you can use the Text input component to ask for an email address, a National Insurance number or someone’s name.
 
-Each component in the GOV.UK Design System has guidance on its use and coded examples. If you’re using the GOV.UK Prototype Kit, or have included GOV.UK Frontend in your build, coded examples will render the same as in the Design System.
-
+Each component in the GOV.UK Design System has guidance on its use and coded examples. If you’re using the GOV.UK Prototype Kit, or have included GOV.UK Frontend in your build, coded examples will render the same as in the Design System...
+##p|Nice! You can also include standalone links:
 ##a|The gov.uk web site|https://www.gov.uk
 ##hr
 ##Row
@@ -22,7 +22,7 @@ Each component in the GOV.UK Design System has guidance on its use and coded exa
 ##spacer|20|
 ##textarea|Your address (Please include any relevant floor number)
 ##select|Country of birth|Choose...|Angiers|Belgium|Canada|Denmark|Ecuador|France
-##date|Your date of birth
+##date|Your date of birth(For example 23 09 1942)
 ##textarea|Other notes (This has a 'rows' setting of 6)|6
 ##End Column
 ##End Row
