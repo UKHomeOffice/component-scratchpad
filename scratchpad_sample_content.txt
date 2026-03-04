@@ -28,7 +28,6 @@ Each component in the GOV.UK Design System has guidance on its use and coded exa
 ##select|Country of birth|Choose...|Angiers|Belgium|Canada|Denmark|Ecuador|France
 ##date|Your date of birth(For example 23 09 1942)
 ##textarea|Other notes (This has a 'rows' setting of 6)|6
-##character_count|Tell us about your favourite shoes (In less than 100 words)|100
 ##End Column
 ##End Row
 ##h3|And now... something in 3 columns
