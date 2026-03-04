@@ -729,14 +729,16 @@ line = line.replace(/<br>$/, "");
 if (currentColumn) {
     currentColumn.appendChild(wrapper);
     currentColumn.appendChild(document.createTextNode("\n"));
+    currentColumn.appendChild(document.createTextNode("\n"));
 } else if (currentRow) {
     currentRow.appendChild(wrapper);
+    currentRow.appendChild(document.createTextNode("\n"));
     currentRow.appendChild(document.createTextNode("\n"));
 } else {
     output.appendChild(wrapper);
     output.appendChild(document.createTextNode("\n"));
+    output.appendChild(document.createTextNode("\n"));
 }
-    
     
   });
 
