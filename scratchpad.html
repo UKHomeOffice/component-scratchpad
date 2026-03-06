@@ -17,8 +17,9 @@ Original version Feb 27th, 2026 by Ian Smith.
 <!-- include GOV.UK frontend -->
 <link rel="stylesheet" href="https://unpkg.com/govuk-frontend@6.0.0/dist/govuk/govuk-frontend.min.css"/>
 
+
 <style>
-  body { padding-bottom: 200px;}
+  body {padding-bottom: 200px;}
   #definition { width: 100%; height: 320px; font-family: monospace; }
   .component-block { margin: 4px 0; padding: 4px; border: 0px solid #b1b4b6;  }
   .gov-row { display: flex; flex-wrap: wrap; width: 100%; margin: 20px 0; }
@@ -583,8 +584,8 @@ tabs: (label, opts) => {
     .join("\n");
 
   return `
-  <h3 class="govuk-heading-m">${label}</h3>
-  <div class="govuk-tabs" data-module="govuk-tabs">
+  <h3 class="govuk-heading-m" fred="ff">${label}</h3>
+  <div class="govuk-tabs" data-module="govuk-tabs" jim="jim">
   <ul class="govuk-tabs__list">
       ${listTabs}
     </ul>
@@ -773,28 +774,60 @@ if (currentColumn) {
   copyBtn.disabled = false; // enable copy button after build
 }
 
+// copyBtn.addEventListener("click", () => {
+//   // Copy ONLY the generated inner HTML (not the surrounding container)
+//   const generatedHTML = output.innerHTML;
+//   
+//   
+// const styleBlocks = Array.from(document.querySelectorAll("style"))
+//     .map(style => style.outerHTML)
+//     .join("\n\n");
+// 
+//   // Combine styles + HTML
+//   const combined = `${styleBlocks}\n\n<div>\n${generatedHTML}\n</div>`;
+// 
+// 
+//   navigator.clipboard.writeText(combined).then(() => {
+//     const original = copyBtn.textContent;
+//     copyBtn.textContent = "Copied!";
+// 
+//     setTimeout(() => {
+//       copyBtn.textContent = original;
+//     }, 2000);
+//   });
+// });
+
 copyBtn.addEventListener("click", () => {
-  // Copy ONLY the generated inner HTML (not the surrounding container)
-  const generatedHTML = output.innerHTML;
-  
-  
-const styleBlocks = Array.from(document.querySelectorAll("style"))
+  // Clone the generated output
+  const temp = document.createElement("div");
+  temp.innerHTML = output.innerHTML;
+
+  // Remove GOV.UK init flags, e.g. data-govuk-tabs-init=""
+  temp.querySelectorAll("[data-govuk-tabs-init]").forEach(el => {
+    el.removeAttribute("data-govuk-tabs-init");
+  });
+
+  // If you later find other components adding their own init markers,
+  // you can generalise it like this:
+  // temp.querySelectorAll("[data-govuk-*-init]").forEach(...)
+
+  // Rebuild the final HTML
+  const styleBlocks = Array.from(document.querySelectorAll("style"))
     .map(style => style.outerHTML)
     .join("\n\n");
 
-  // Combine styles + HTML
-  const combined = `${styleBlocks}\n\n<div>\n${generatedHTML}\n</div>`;
+  const cleanedHTML = `${styleBlocks}\n\n<div>\n${temp.innerHTML}\n</div>`;
 
-
-  navigator.clipboard.writeText(combined).then(() => {
+  navigator.clipboard.writeText(cleanedHTML).then(() => {
     const original = copyBtn.textContent;
     copyBtn.textContent = "Copied!";
-
     setTimeout(() => {
       copyBtn.textContent = original;
     }, 2000);
   });
 });
+
+
 </script>
 <script>
 
