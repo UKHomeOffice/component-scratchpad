@@ -920,19 +920,15 @@ if (currentColumn) {
 
 
 // now inject the error summary box at the top, if there are any error components
-  // Parse the HTML string into a document
-
+ 
   // Find all <p> elements with id ending "-error"
   const errorElements = Array.from(
     output.querySelectorAll('p[id$="-error"]')
   );
 
-  if (errorElements.length === 0) {
-    return output; // nothing to do
-  }
-
+let summaryHtml = "";
+  if (errorElements.length > 0) {
   // Build an array of { id, text }
-
 const errors = errorElements.map(p => ({
   id: p.id,
   text: p.textContent.replace(/^\s*Error:\s*/i, "").trim()
@@ -940,7 +936,7 @@ const errors = errorElements.map(p => ({
 
 
   // Build the GOV.UK error summary HTML
-  const summaryHtml = `
+  summaryHtml = `
     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1">
       <h2 class="govuk-error-summary__title" id="error-summary-title">
         There is a problem
@@ -954,6 +950,7 @@ const errors = errorElements.map(p => ({
       </div>
     </div>
   `;
+  } 
 
   // Inject at the top of <body>
   output.insertAdjacentHTML("afterbegin", summaryHtml);
