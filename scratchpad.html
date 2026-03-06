@@ -36,7 +36,7 @@ Original version Feb 27th, 2026 by Ian Smith.
 
 <div class="govuk-header" style="padding-top:20px">
   <div class="govuk-header__container govuk-width-container">
-  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 1.6)</h1>
+  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 1.7)</h1>
    </div>
   </div>
   
@@ -277,32 +277,78 @@ const COMPONENTS = {
        
 
 input: (label) => {
-//const [main, hint] = label.split(":").map(s => s.trim());
 
-const [rawMain, rawHint] = label.split("(");
-const main = rawMain.trim();
-const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+// first see if there is an error string, split it out if there is
+const [rawMain, error] = label.split("Error:");
+
+// now look for a hint in whats left
+const [splitMain, rawHint] = rawMain.split("(");
+const main = splitMain.trim();
+
+const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
 
   return `
-    <div class="govuk-form-group">
+    <div class="govuk-form-group  ${error ? ` govuk-form-group--error` : ""}">
       <label class="govuk-label">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-      <input class="govuk-input" type="text">
+       ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
+      <input class="govuk-input ${error ? ` govuk-input--error` : ""}" type="text">
     </div>`;
     },
+
+
+// // version up to 5/3/26
+// input: (label) => {
+// // const [main, hint] = label.split(":").map(s => s.trim());
+// 
+// const [rawMain, rawHint] = label.split("(");
+// const main = rawMain.trim();
+// const prehint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
+// const [hint,error] = prehint.split("Error:");
+// 
+//   return `
+//     <div class="govuk-form-group  ${error ? ` govuk-form-group--error` : ""}">
+//       <label class="govuk-label">${main}</label>
+//       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+//        ${error ? `<p id="xxx-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
+//       <input class="govuk-input ${error ? ` govuk-input--error` : ""}" type="text">
+//     </div>`;
+//     },
+
+
 
 textarea: (label,opts) => {
-const [rawMain, rawHint] = label.split("(");
-const main = rawMain.trim();
-const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+// first see if there is an error string, split it out if there is
+const [rawMain, error] = label.split("Error:");
+
+// now look for a hint in whats left
+const [splitMain, rawHint] = rawMain.split("(");
+const main = splitMain.trim();
+
+const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
 
   return `
-    <div class="govuk-form-group">
+    <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
       <label class="govuk-label">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-       <textarea class="govuk-textarea" rows="${opts[0]||"3"}"></textarea>
+       ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
+       <textarea class="govuk-textarea ${error ? ` govuk-textarea--error` : ""}" rows="${opts[0]||"3"}"></textarea>
     </div>`;
     },
+
+// //version up to 5/3/26
+// textarea: (label,opts) => {
+// const [rawMain, rawHint] = label.split("(");
+// const main = rawMain.trim();
+// const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+// 
+//   return `
+//     <div class="govuk-form-group">
+//       <label class="govuk-label">${main}</label>
+//       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+//        <textarea class="govuk-textarea" rows="${opts[0]||"3"}"></textarea>
+//     </div>`;
+//     },
 
 character_count: (label,opts) => {
 const [rawMain, rawHint] = label.split("(");
@@ -328,22 +374,28 @@ const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
 
 
 date: (label,opts) => {
- const [rawMain, rawHint] = label.split("(");
-const main = rawMain.trim();
-const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+// first see if there is an error string, split it out if there is
+const [rawMain, error] = label.split("Error:");
+
+// now look for a hint in whats left
+const [splitMain, rawHint] = rawMain.split("(");
+const main = splitMain.trim();
+
+const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
 
 return`
-<div class="govuk-form-group">
+<div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
   <fieldset class="govuk-fieldset" role="group" aria-describedby="passport-issued-hint">
      <label class="govuk-label">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-    <div class="govuk-date-input" id="passport-issued">
+   ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
+ <div class="govuk-date-input" id="passport-issued">
       <div class="govuk-date-input__item">
         <div class="govuk-form-group">
           <label class="govuk-label govuk-date-input__label" for="passport-issued-day">
             Day
           </label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-day" name="passport-issued-day" type="text" inputmode="numeric">
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2 ${error ? ` govuk-input--error` : ""}" id="passport-issued-day" name="passport-issued-day" type="text" inputmode="numeric">
         </div>
       </div>
       <div class="govuk-date-input__item">
@@ -351,7 +403,7 @@ return`
           <label class="govuk-label govuk-date-input__label" for="passport-issued-month">
             Month
           </label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="passport-issued-month" name="passport-issued-month" type="text" inputmode="numeric">
+          <input class="govuk-input govuk-date-input__input govuk-input--width-2 ${error ? ` govuk-input--error` : ""}" id="passport-issued-month" name="passport-issued-month" type="text" inputmode="numeric">
         </div>
       </div>
       <div class="govuk-date-input__item">
@@ -359,7 +411,7 @@ return`
           <label class="govuk-label govuk-date-input__label" for="passport-issued-year">
             Year
           </label>
-          <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="passport-issued-year" name="passport-issued-year" type="text" inputmode="numeric">
+          <input class="govuk-input govuk-date-input__input govuk-input--width-4 ${error ? ` govuk-input--error` : ""}" id="passport-issued-year" name="passport-issued-year" type="text" inputmode="numeric">
         </div>
       </div>
     </div>
@@ -400,17 +452,51 @@ const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
     </div>`;
     },
     
+radios: (label, opts) => {
+// first see if there is an error string, split it out if there is
+const [rawMain, error] = label.split("Error:");
+
+// now look for a hint in whats left
+const [splitMain, rawHint] = rawMain.split("(");
+const main = splitMain.trim();
+
+const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
+
+  return `
+  <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
+    <fieldset class="govuk-fieldset">
+     <label class="govuk-label">${main}</label>
+       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
+      <div class="govuk-radios govuk-radios">
+        ${opts.map((o,i)=>`
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="${label}-${i}" name="${label}" type="radio" value="${o}">
+            <label class="govuk-label govuk-radios__label" for="${label}-${i}">${o}</label>
+          </div>`).join("")}
+      </div>
+    </fieldset>
+    </div>`;
+    },
+    
+    
 
 
 checkboxes: (label, opts) =>  {
-const [rawMain, rawHint] = label.split("(");
-const main = rawMain.trim();
-const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+// first see if there is an error string, split it out if there is
+const [rawMain, error] = label.split("Error:");
+
+// now look for a hint in whats left
+const [splitMain, rawHint] = rawMain.split("(");
+const main = splitMain.trim();
+
+const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
   return `
-  <div class="govuk-form-group">
+  <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
     <fieldset class="govuk-fieldset">
       <label class="govuk-label">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
       <div class="govuk-checkboxes">
         ${opts.map((o,i)=>`
           <div class="govuk-checkboxes__item">
@@ -421,22 +507,86 @@ const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
     </fieldset>
      </div>`;
     },
+    
+// //current up to 5/3/26   
+// radios: (label, opts) => {
+//  const [rawMain, rawHint] = label.split("(");
+// const main = rawMain.trim();
+// const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+//   return `
+//   <div class="govuk-form-group">
+//     <fieldset class="govuk-fieldset">
+//      <label class="govuk-label">${main}</label>
+//        ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+//       <div class="govuk-radios govuk-radios">
+//         ${opts.map((o,i)=>`
+//           <div class="govuk-radios__item">
+//             <input class="govuk-radios__input" id="${label}-${i}" name="${label}" type="radio" value="${o}">
+//             <label class="govuk-label govuk-radios__label" for="${label}-${i}">${o}</label>
+//           </div>`).join("")}
+//       </div>
+//     </fieldset>
+//     </div>`;
+//     },
+        
+    
+    
+// //current up to 5/3/26    
+//  checkboxes: (label, opts) =>  {
+// const [rawMain, rawHint] = label.split("(");
+// const main = rawMain.trim();
+// const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+//   return `
+//   <div class="govuk-form-group">
+//     <fieldset class="govuk-fieldset">
+//       <label class="govuk-label">${main}</label>
+//       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+//       <div class="govuk-checkboxes">
+//         ${opts.map((o,i)=>`
+//           <div class="govuk-checkboxes__item">
+//             <input class="govuk-checkboxes__input" id="${label}-${i}" type="checkbox" value="${o}">
+//             <label class="govuk-label govuk-checkboxes__label" for="${label}-${i}">${o}</label>
+//           </div>`).join("")}
+//       </div>
+//     </fieldset>
+//      </div>`;
+//     },
 
 
 select: (label, opts) => {
-const [rawMain, rawHint] = label.split("(");
-const main = rawMain.trim();
-const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+// first see if there is an error string, split it out if there is
+const [rawMain, error] = label.split("Error:");
+
+// now look for a hint in whats left
+const [splitMain, rawHint] = rawMain.split("(");
+const main = splitMain.trim();
+
+const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
   return `
-    <div class="govuk-form-group">
+    <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
       <label class="govuk-label">${main}</label>
     ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-        <select class="govuk-select">
+${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
+        <select class="govuk-select ${error ? ` govuk-select--error` : ""}">
         ${opts.map(o => `<option>${o}</option>`).join("")}
       </select>
     </div>`;
     },
 
+// //current up to 5/3/26  
+// select: (label, opts) => {
+// const [rawMain, rawHint] = label.split("(");
+// const main = rawMain.trim();
+// const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+//   return `
+//     <div class="govuk-form-group">
+//       <label class="govuk-label">${main}</label>
+//     ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+//         <select class="govuk-select">
+//         ${opts.map(o => `<option>${o}</option>`).join("")}
+//       </select>
+//     </div>`;
+//     },
 
 
   details: (label, opts) => `
@@ -769,6 +919,46 @@ if (currentColumn) {
   });
 
 
+// now inject the error summary box at the top, if there are any error components
+  // Parse the HTML string into a document
+
+  // Find all <p> elements with id ending "-error"
+  const errorElements = Array.from(
+    output.querySelectorAll('p[id$="-error"]')
+  );
+
+  if (errorElements.length === 0) {
+    return output; // nothing to do
+  }
+
+  // Build an array of { id, text }
+
+const errors = errorElements.map(p => ({
+  id: p.id,
+  text: p.textContent.replace(/^\s*Error:\s*/i, "").trim()
+}));
+
+
+  // Build the GOV.UK error summary HTML
+  const summaryHtml = `
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1">
+      <h2 class="govuk-error-summary__title" id="error-summary-title">
+        There is a problem
+      </h2>
+      <div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list">
+          ${errors
+            .map(err => `<li><a href="#${err.id}">${err.text}</a></li>`)
+            .join("")}
+        </ul>
+      </div>
+    </div>
+  `;
+
+  // Inject at the top of <body>
+  output.insertAdjacentHTML("afterbegin", summaryHtml);
+
+ 
 
   initAll();
   copyBtn.disabled = false; // enable copy button after build
