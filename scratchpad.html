@@ -787,7 +787,7 @@ const status = s.trim();
       </div>
        </div>
     <div class="govuk-task-list__status" id="${label}-status">    
-${status === 'Completed' ? status : `<strong class="govuk-tag govuk-tag--blue">${status}</strong>`}
+${status === 'Completed' ? status : `<strong class="govuk-tag govuk-tag--${status === 'Cannot be started' ? "grey": "blue"}">${status}</strong>`}
 
     </div>
      </li>`;
