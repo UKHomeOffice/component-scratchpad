@@ -102,7 +102,8 @@ Original version Feb 27th, 2026 by Ian Smith.
 			<tr class="specRow"><td>button</td><td>button|Label here|font colour|background colour</td></td><td>Colours are optional, defaults to gov.uk primary button</td></tr>
 			<tr class="specRow2"><td>primary button</td><td>button_p|Label here</td></td><td>gov.uk primary button</td></tr>
 			<tr class="specRow"><td>secondary button</td><td>button_s|Label here</td></td><td>gov.uk secondary button</td></tr>
-			
+			<tr class="specRow2"><td>file upload</td><td>upload|Label here</td><td>Label default is 'Upload a file'</td></tr>
+		
 			<tr class="specRow"><td>details</td><td>details|Title here|content</td><td></td></tr>
 			<tr class="specRow2"><td>inset</td><td>inset|Text here</td><td></td></tr>
 			<tr class="specRow"><td>warning</td><td>warning|Text here</td><td></td></tr>
@@ -600,6 +601,16 @@ ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message">
   inset: (label) =>
     `<div class="govuk-inset-text">${label}</div>`,
 
+//file upload
+upload: (label) =>
+`<div class="govuk-form-group">
+  <label class="govuk-label" for="file-upload-1">
+    ${label}
+  </label>
+  <input class="govuk-file-upload" id="file-upload-1" name="fileUpload1" type="file">
+</div>`,
+
+
   warning: (label) =>
     `<div class="govuk-warning-text">
       <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
@@ -1041,6 +1052,7 @@ goback|Text here
 button|Label here|font colour|background colour
 button_p|Label here
 button_s|Label here
+upload|Upload a file
 details|Title here |content
 inset|Text here
 warning|Text here
