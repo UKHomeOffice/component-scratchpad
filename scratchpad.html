@@ -328,12 +328,13 @@ const main = splitMain.trim();
 
 const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
 
+
   return `
     <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
       <label class="govuk-label">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
        ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
-       <textarea class="govuk-textarea ${error ? ` govuk-textarea--error` : ""}" rows="${opts[0]||"3"}"></textarea>
+       <textarea class="govuk-textarea ${error ? ` govuk-textarea--error` : ""}" rows="${parseInt(opts[0], 10) > 0 ? parseInt(opts[0], 10) : "3"}"></textarea>
     </div>`;
     },
 
@@ -433,81 +434,245 @@ goback: (label) =>
   button: (label,opts) =>
     `<button class="govuk-button" style="color:${opts[0]||"white"};background-color:${opts[1]||"#116F48"};"data-module="govuk-button">${label}</button>`,
 
+//this used for hidden_radio only
+radio: (label) => {
+//appends a unique number to each radio ID so that they work if you have more than one hidden radio
+const thisID = `${label.replace(/\s+/g,"_")}_${Date.now().toString(36)}_${(window.__idCounter=(window.__idCounter||0)+1).toString(36)}`;
+const thisName = `${label.replace(/\s+/g,"_")}`;
+
+return`
+<div class="govuk-radios__item">
+          <input class="govuk-radios__input"
+                 id="${thisID}"
+                 name="hidden_radio"
+                 type="radio"
+                 value="${thisID}">
+          <label class="govuk-label govuk-radios__label"
+                 for="${thisID}">${label}</label>
+        </div>`;
+},
+
+
+//this used for hidden_checkbox only
+checkbox: (label) => {
+//appends a unique number to each radio ID so that they work if you have more than one hidden radio
+const thisID = `${label.replace(/\s+/g,"_")}_${Date.now().toString(36)}_${(window.__idCounter=(window.__idCounter||0)+1).toString(36)}`;
+const thisName = `${label.replace(/\s+/g,"_")}`;
+
+return`
+<div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input"
+                 id="${thisID}"
+                 name="${thisName}"
+                 type="radio"
+                 value="${thisID}">
+          <label class="govuk-label govuk-checkboxes__label"
+                 for="${thisID}">${label}</label>
+        </div>`;
+},
+
+
+
 radios: (label, opts) => {
- const [rawMain, rawHint] = label.split("(");
-const main = rawMain.trim();
-const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
-  return `
-  <div class="govuk-form-group">
-    <fieldset class="govuk-fieldset">
-     <label class="govuk-label">${main}</label>
-       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-      <div class="govuk-radios govuk-radios">
-        ${opts.map((o,i)=>`
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="${label}-${i}" name="${label}" type="radio" value="${o}">
-            <label class="govuk-label govuk-radios__label" for="${label}-${i}">${o}</label>
-          </div>`).join("")}
-      </div>
-    </fieldset>
-    </div>`;
-    },
-    
-radios: (label, opts) => {
-// first see if there is an error string, split it out if there is
-const [rawMain, error] = label.split("Error:");
+  // First see if there is an error string, split it out if there is
+  const [rawMain, error] = label.split("Error:");
 
-// now look for a hint in whats left
-const [splitMain, rawHint] = rawMain.split("(");
-const main = splitMain.trim();
+  // Now look for a hint in what's left
+  const [splitMain, rawHint] = rawMain.split("(");
+  const main = splitMain.trim();
+  const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
 
-const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
+  // Process opts:
+  // If an option contains a colon, strip text after colon (use as ID)
+  const processed = opts.map(o => {
+    const idx = o.indexOf(":");
+    if (idx === -1) {
+      return { display: o.trim(), revealId: null };
+    }
+    const display = o.slice(0, idx).trim();
+    const revealId = o.slice(idx + 1).trim(); // everything after colon
+    return { display, revealId };
+  });
 
-  return `
-  <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
-    <fieldset class="govuk-fieldset">
-     <label class="govuk-label">${main}</label>
-       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
-      <div class="govuk-radios govuk-radios">
-        ${opts.map((o,i)=>`
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="${label}-${i}" name="${label}" type="radio" value="${o}">
-            <label class="govuk-label govuk-radios__label" for="${label}-${i}">${o}</label>
-          </div>`).join("")}
-      </div>
-    </fieldset>
-    </div>`;
-    },
-    
-    
-
-
-checkboxes: (label, opts) =>  {
-// first see if there is an error string, split it out if there is
-const [rawMain, error] = label.split("Error:");
-
-// now look for a hint in whats left
-const [splitMain, rawHint] = rawMain.split("(");
-const main = splitMain.trim();
-
-const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
-  return `
+  // Now build the actual radios component including conditionals
+  let html = `
   <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
     <fieldset class="govuk-fieldset">
       <label class="govuk-label">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
-      <div class="govuk-checkboxes">
-        ${opts.map((o,i)=>`
-          <div class="govuk-checkboxes__item">
-            <input class="govuk-checkboxes__input" id="${label}-${i}" type="checkbox" value="${o}">
-            <label class="govuk-label govuk-checkboxes__label" for="${label}-${i}">${o}</label>
-          </div>`).join("")}
+      ${
+        error
+          ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>`
+          : ""
+      }
+      <div class="govuk-radios" data-module="govuk-radios">
+  `;
+
+  processed.forEach((item, i) => {
+    const inputId = `${label}-${i}`;
+    const revealAttr = item.revealId ? ` data-aria-controls="conditional-${item.revealId}"` : "";
+
+    html += `
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input"
+                 id="${inputId}"
+                 name="${label}"
+                 type="radio"
+                 value="${item.display}"${revealAttr}>
+          <label class="govuk-label govuk-radios__label"
+                 for="${inputId}">${item.display}</label>
+        </div>
+    `;
+
+
+
+// Add conditional section if we have a reveal ID AND matching hidden component(s)
+if (item.revealId && window.hiddenComponents && window.hiddenComponents[item.revealId]) {
+  const hiddens = window.hiddenComponents[item.revealId]; // now an array
+
+  let hiddenHtml = "";
+  for (let i = 0; i < hiddens.length; i++) {
+    const hidden = hiddens[i];
+    const key = hidden.type.replace("hidden_", "");
+    if (COMPONENTS[key]) {
+      hiddenHtml += COMPONENTS[key](hidden.label, []);
+    }
+  }
+
+  html += `
+    <div class="govuk-radios__conditional govuk-radios__conditional--hidden"
+         id="conditional-${item.revealId}">
+      ${hiddenHtml}
+    </div>
+  `;
+}
+
+
+
+  });
+
+  html += `
       </div>
     </fieldset>
-     </div>`;
-    },
+  </div>`;
+
+  return html;
+},  
+    
+checkboxes: (label, opts) => {
+  // First see if there is an error string, split it out if there is
+  const [rawMain, error] = label.split("Error:");
+
+  // Now look for a hint in what's left
+  const [splitMain, rawHint] = rawMain.split("(");
+  const main = splitMain.trim();
+  const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
+
+  // Process opts:
+  // If an option contains a colon, strip text after colon (use as ID)
+  const processed = opts.map(o => {
+    const idx = o.indexOf(":");
+    if (idx === -1) {
+      return { display: o.trim(), revealId: null };
+    }
+    const display = o.slice(0, idx).trim();
+    const revealId = o.slice(idx + 1).trim(); // everything after colon
+    return { display, revealId };
+  });
+
+  // Now build the actual radios component including conditionals
+  let html = `
+  <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
+    <fieldset class="govuk-fieldset">
+      <label class="govuk-label">${main}</label>
+      ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+      ${
+        error
+          ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>`
+          : ""
+      }
+      <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+  `;
+
+  processed.forEach((item, i) => {
+    const inputId = `${label}-${i}`;
+    const revealAttr = item.revealId ? ` data-aria-controls="conditional-${item.revealId}"` : "";
+
+    html += `
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input"
+                 id="${inputId}"
+                 name="${label}"
+                 type="checkbox"
+                 value="${item.display}"${revealAttr}>
+          <label class="govuk-label govuk-checkboxes__label"
+                 for="${inputId}">${item.display}</label>
+        </div>
+    `;
+
+
+
+
+
+// Add conditional section if we have a reveal ID AND matching hidden component(s)
+if (item.revealId && window.hiddenComponents && window.hiddenComponents[item.revealId]) {
+  const hiddens = window.hiddenComponents[item.revealId]; // now an array
+
+  let hiddenHtml = "";
+  for (let i = 0; i < hiddens.length; i++) {
+    const hidden = hiddens[i];
+    const key = hidden.type.replace("hidden_", "");
+    if (COMPONENTS[key]) {
+      hiddenHtml += COMPONENTS[key](hidden.label, []);
+    }
+  }
+
+  html += `
+    <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden"
+         id="conditional-${item.revealId}">
+      ${hiddenHtml}
+    </div>
+  `;
+}
+
+
+
+  });
+
+  html += `
+      </div>
+    </fieldset>
+  </div>`;
+
+  return html;
+},  
+
+
+// checkboxes: (label, opts) =>  {
+// // first see if there is an error string, split it out if there is
+// const [rawMain, error] = label.split("Error:");
+// 
+// // now look for a hint in whats left
+// const [splitMain, rawHint] = rawMain.split("(");
+// const main = splitMain.trim();
+// 
+// const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
+//   return `
+//   <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
+//     <fieldset class="govuk-fieldset">
+//       <label class="govuk-label">${main}</label>
+//       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+// ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
+//       <div class="govuk-checkboxes">
+//         ${opts.map((o,i)=>`
+//           <div class="govuk-checkboxes__item">
+//             <input class="govuk-checkboxes__input" id="${label}-${i}" type="checkbox" value="${o}">
+//             <label class="govuk-label govuk-checkboxes__label" for="${label}-${i}">${o}</label>
+//           </div>`).join("")}
+//       </div>
+//     </fieldset>
+//      </div>`;
+//     },
     
 // //current up to 5/3/26   
 // radios: (label, opts) => {
@@ -807,6 +972,69 @@ ${status === 'Completed' ? status : `<strong class="govuk-tag govuk-tag--${statu
 //  end of components   
 };
 
+///
+// ------------------------------------------------------------
+// GLOBAL STORE for hidden elements
+// ------------------------------------------------------------
+window.hiddenComponents = {};   // { id: { type, label, id } }
+
+// ------------------------------------------------------------
+// removeHiddenLines(text)
+// - text: the full scratchpad description as a string
+// - Returns: cleanedText (string) with hidden_* lines removed
+//            AND populates window.hiddenComponents
+// ------------------------------------------------------------
+function removeHiddenLines(text) {
+
+  // Reset store (optional)
+  window.hiddenComponents = {};
+
+  // Split input into individual lines
+  const lines = text.split(/\r?\n/);
+
+  const cleaned = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    // Check if line begins with ##hidden_
+    if (/^##hidden_(radio|checkbox|input|textarea)\b/i.test(trimmed)) {
+
+      // Split by |   →  [ "##hidden_xxx", "Label", "elementId" ]
+      const parts = trimmed.split("|").map(s => s.trim());
+
+      if (parts.length >= 3) {
+        const typeFull = parts[0];          // e.g. "##hidden_radio"
+        const label    = parts[1];          // label text
+        const id       = parts[2];          // element id
+
+        // Normalised type without leading ##
+        const type = typeFull.replace(/^##/, "");
+
+        // Stash globally
+       //  window.hiddenComponents[id] = { type, label, id };
+        (window.hiddenComponents[id] ||= []).push({ type, label, id });
+      }
+
+      // Do NOT keep this line → skip
+      continue;
+    }
+
+    // Non‑hidden line → keep in the output
+    cleaned.push(line);
+  }
+
+  // Return text with hidden lines removed
+  return cleaned.join("\n");
+}
+
+
+
+
+
+///
+
+
 /* --- build the page --- */
 document.getElementById("buildBtn").addEventListener("click", buildPage);
 const output = document.getElementById("output");
@@ -819,11 +1047,18 @@ function buildPage() {
 //     .map(l => l.trim())
 //     .filter(l => l.length > 0);
 
-//remove all newlines and replace with <br>
-const sourceText = document.getElementById("definition").value.replace(/\r\n|\n|\r/g, "<br>");
+
+
+
+
+//remove all hidden_ entries to use later, also remove newlines and replace with <br>
+const sourceText = document.getElementById("definition").value; //.replace(/\r\n|\n|\r/g, "<br>");
+
+const newSource = removeHiddenLines(sourceText).replace(/\r\n|\n|\r/g, "<br>");
+
 
 // split the result into separate entries using ## at the start of each line
-const lines = sourceText
+const lines = newSource
   .split("##")
   .map(l => l.trim())
   .filter(l => l.length > 0);
@@ -1004,6 +1239,12 @@ copyBtn.addEventListener("click", () => {
   temp.querySelectorAll("[data-govuk-tabs-init]").forEach(el => {
     el.removeAttribute("data-govuk-tabs-init");
   });
+  
+ temp.querySelectorAll("[data-govuk-radios-init]").forEach(el => {
+    el.removeAttribute("data-govuk-radios-init");
+  });
+  
+  
 
   // If you later find other components adding their own init markers,
   // you can generalise it like this:
@@ -1047,6 +1288,10 @@ date|Label here (Optional hint)
 radios|Label here (Optional hint) |Radio 1|Radio 2 |...final radio
 checkboxes|Label here (Optional hint)|checkbox 1|checkbox 2|...final checkbox
 select|Label here (Optional hint)|option 1|option 2|...final option
+hidden_input|Label here|ID
+hidden_textarea|Label here|ID
+hidden_radio|Label here|ID
+hidden_checkbox|Label here|ID
 goback
 goback|Text here
 button|Label here|font colour|background colour
