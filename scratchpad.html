@@ -464,7 +464,7 @@ return`
           <input class="govuk-checkboxes__input"
                  id="${thisID}"
                  name="${thisName}"
-                 type="radio"
+                 type="checkbox"
                  value="${thisID}">
           <label class="govuk-label govuk-checkboxes__label"
                  for="${thisID}">${label}</label>
@@ -957,14 +957,17 @@ const status = s.trim();
         return `
         <li class="govuk-task-list__item govuk-task-list__item--with-link">
     <div class="govuk-task-list__name-and-hint">
-    ${status === 'Cannot be started' ? main : `<a class="govuk-link govuk-task-list__link" href="${h||"#"}">${main}</a>`}
+  ${status === 'Cannot be started' || status.charAt(0) === '['
+  ? main 
+  : `<a class="govuk-link govuk-task-list__link" href="${h || "#"}">${main}</a>`}
      <div id="${label}" class="govuk-task-list__hint">
         ${hint}
       </div>
        </div>
     <div class="govuk-task-list__status" id="${label}-status">    
-${status === 'Completed' ? status : `<strong class="govuk-tag govuk-tag--${status === 'Cannot be started' ? "grey": "blue"}">${status}</strong>`}
-
+${status === 'Completed' || status.charAt(0) === '['
+  ? status 
+  : `<strong class="govuk-tag govuk-tag--${status === 'Cannot be started' || status.charAt(0) === '_' ? "grey" : "blue"}">${status}</strong>`}
     </div>
      </li>`;
       }).join("")}    
@@ -998,7 +1001,7 @@ function removeHiddenLines(text) {
     const trimmed = line.trim();
 
     // Check if line begins with ##hidden_
-    if (/^##hidden_(radio|checkbox|input|textarea)\b/i.test(trimmed)) {
+    if (/^##hidden_(radio|checkbox|input|textarea|date|upload|button_p|button_s|p|h1|h2|h3)\b/i.test(trimmed)) {
 
       // Split by |   →  [ "##hidden_xxx", "Label", "elementId" ]
       const parts = trimmed.split("|").map(s => s.trim());
