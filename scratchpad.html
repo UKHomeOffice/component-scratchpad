@@ -53,13 +53,25 @@ Original version Feb 27th, 2026 by Ian Smith.
   
 <div class="govuk-width-container">
 <br>&nbsp;
-
 <p class="govuk-body">Use this tool to quickly create html content for prototypes and other non-live pages, based on gov.uk components.</p>
-  <details class="govuk-details" data-module="govuk-details">
+<ul class="govuk-list govuk-list--bullet">
+  <li>
+<a class="govuk-link" href="javascript:createAndOpenModal('how-it-works', 'How it works')">How it works</a><br>
+</li>
+  <li>
+<a class="govuk-link" href="javascript:createAndOpenModal('supported-components','Supported components')">Supported-components</a><br>
+</li>
+  <li>
+<a class="govuk-link" href="javascript:createAndOpenModal('advanced-features','Advanced features')">Advanced features</a>
+</li>
+</ul>
+
+
+  <details class="govuk-details" data-module="govuk-details" style="display:none">
       <summary class="govuk-details__summary">
         <span class="govuk-details__summary-text">How it works</span>
            </summary>
-			<div class="govuk-details__text">
+			<div class="govuk-details__text" id="how-it-works">
 				 Instead of writing html code, describe each component using (relatively) plain language.<br><br>
 				 Each new component description must start with ##. The format is:<br>
 				 <code class="showCode">##component_name | Label or text | Further options</code><br><br>
@@ -74,11 +86,11 @@ Original version Feb 27th, 2026 by Ian Smith.
 			</div>
   </details>
 
- <details class="govuk-details" data-module="govuk-details">
+ <details class="govuk-details" data-module="govuk-details" style="display:none">
       <summary class="govuk-details__summary">
-        <span class="govuk-details__summary-text">Supported components</span>
+        <span class="govuk-details__summary-text" >Supported components</span>
            </summary>
-      <div class="govuk-details__text">
+      <div class="govuk-details__text" id="supported-components">
 			<table class="specTable">
 			<tr class="specHeader" style="font-weight:bold"><td>Component</td><td>Syntax</td><td>Notes</td></tr>
 			<tr class="specRow"><td>h1</td><td>h1|Text here|Caption</td><td>Caption is optional</td></tr>
@@ -126,6 +138,46 @@ Original version Feb 27th, 2026 by Ian Smith.
 			</table>
       </div>
     </details>
+    
+    
+  <details class="govuk-details" data-module="govuk-details" style="display:none">
+      <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">Advanced features</span>
+           </summary>
+			<div class="govuk-details__text" id="advanced-features">
+				 <b>Error summaries and error states</b><br>
+				 Put an input component into an error state by appending 'Error:error message' to the component label e.g.<br><br>
+				  <code class="showCode">##input|What is your name? (Include any middle names) Error: Please enter your full name<br>
+				  ##date|When did you arrive (Give the exact date) Error: Tell us when you arrived
+				  </code><br><br>
+				  will display the component label, the hint, will create an error summary box at the top of the page and link to each component in error state.
+			<p>&nbsp;</p>
+			<b>Conditional reveals</b><br>
+				 Create a conditional reveal from a radio button or checkbox by specifying an ID which you can then attach to a <i>hidden_component</i> e.g.<br><br>
+				  <code class="showCode">
+				  ##radios|Where do you live?|At home|At University|In a box:size1<br>
+##hidden_input|How big is the box?|size1
+				  </code><br><br>
+				  will reveal the input box defined as 'size1' when the radio button 'In a box' is clicked.<br><br>
+				  Add more than one component with the same id and they will all be revealed.<br><br>
+				  Add different ids to different radios and checkboxes to reveal different components. e.g.
+				  <code class="showCode"><br>
+##radios|Where do you live?|At home:home1|At University:uni1|In a box:box1<br>
+##hidden_p|Who do you live with?|home1<br>
+##hidden_checkbox|Mum|home1<br>
+##hidden_checkbox|Dad|home1<br>
+##hidden_checkbox|Carers|home1<br>
+##hidden_date|When did you start?|uni1<br>
+##hidden_input|How big is the box?(Tell us roughly)|box1<br>
+</code>
+<br><br>
+Supported components:<br><code class="showCode">hidden_input, hidden_textarea, hidden_radio, hidden_checkbox, hidden_date, hidden_p, hidden_button_p, hidden_button_s, hidden_h2, hidden_h3 </code>
+<br><br>Important note: conditional reveals only work when <i>all</i> the IDs and hidden components have been specified. If its not working check you have at least one hidden component for every ID specified in the radio or checkox components.
+
+			</div>
+  </details>
+  
+    
     
     
 <!-- content suggestion on/off checkbox -->
@@ -1488,6 +1540,178 @@ comment|Text here
 
 })();
 </script>
+
+<script>
+/**
+ * createAndOpenModal(sourceDivId)
+ * - Creates (once) and opens a responsive modal.
+ * - Pulls innerHTML from the specified div id into the modal body at runtime.
+ * - 60% viewport width, 50% viewport height; body scrolls if needed.
+ * - Black overlay at 33% opacity; click overlay or X (or Esc) to close.
+ */
+function createAndOpenModal(sourceDivId, titleText) {
+  // --- helpers
+  const qs = (sel, root = document) => root.querySelector(sel);
+
+  // --- ensure styles exist once
+  if (!qs('#__simpleModalStyles')) {
+    const style = document.createElement('style');
+    style.id = '__simpleModalStyles';
+    style.textContent = `
+      .__sm_overlay{
+        position:fixed; inset:0;
+        background:#000; opacity:.33;
+        z-index:9998;
+      }
+	 .__sm_modal{
+	  position:fixed;
+	  left:50%; top:50%;
+	  transform:translate(-50%,-50%);
+	  width:80vw; height:60vh; /* ← changed */
+	  background:#eee;
+	  z-index:9999;
+	  box-sizing:border-box;
+	  border:1px solid #666;
+	  display:flex;
+	  flex-direction:column;
+	}
+      .__sm_header{
+        height:44px;
+        background:#111;
+        display:flex;
+        justify-content:flex-end;
+        align-items:center;
+        padding:0 10px;
+        box-sizing:border-box;
+        flex:0 0 auto;
+        color:white;
+      }
+      .__sm_close{
+        appearance:none;
+        border:0;
+        background:transparent;
+        color:#fff;
+        font-size:28px;
+        line-height:1;
+        cursor:pointer;
+        padding:0 4px;
+      }
+      .__sm_close:focus{
+        outline:2px solid #fff;
+        outline-offset:2px;
+      }
+      .__sm_body{
+        flex:1 1 auto;
+        overflow:auto;
+        padding:12px;
+        box-sizing:border-box;
+        font-family:sans-serif;
+        font-weight:lighter;
+      }
+
+	.__sm_title{
+	  font-family:sans-serif;
+	  font-size:18pt;
+	  color:#f2f2f2;
+	  font-weight:normal;
+	  margin:0;
+	  padding:0;
+	  flex:1 1 auto;
+	}
+
+      /* Responsive tweaks */
+      @media (max-width: 900px){
+        .__sm_modal{ width:90vw; height:70vh; }
+      }
+      @media (max-width: 480px){
+        .__sm_modal{ width:95vw; height:80vh; }
+        .__sm_header{ height:48px; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // --- create DOM once
+  let overlay = qs('#__simpleModalOverlay');
+  let modal   = qs('#__simpleModal');
+
+  const closeModal = () => {
+    if (overlay) overlay.remove();
+    if (modal) modal.remove();
+    document.removeEventListener('keydown', onKeyDown, true);
+    if (previousActive && previousActive.focus) previousActive.focus();
+    overlay = modal = null;
+  };
+
+  const onKeyDown = (e) => {
+    if (e.key === 'Escape') closeModal();
+  };
+
+  // If already open, close then reopen with new content
+  if (overlay || modal) closeModal();
+
+  const src = document.getElementById(sourceDivId);
+  const html = src ? src.innerHTML : `<div>Could not find div#${String(sourceDivId)}</div>`;
+
+  overlay = document.createElement('div');
+  overlay.id = '__simpleModalOverlay';
+  overlay.className = '__sm_overlay';
+  overlay.addEventListener('click', closeModal);
+
+  modal = document.createElement('div');
+  modal.id = '__simpleModal';
+  modal.className = '__sm_modal';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+
+const header = document.createElement('div');
+header.className = '__sm_header';
+header.style.justifyContent = 'space-between';
+
+const title = document.createElement('div');
+title.className = '__sm_title';
+title.textContent = titleText || '';
+  
+ 
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = '__sm_close';
+  closeBtn.setAttribute('aria-label', 'Close dialog');
+  closeBtn.innerHTML = '&times;';
+  closeBtn.addEventListener('click', closeModal);
+
+  const body = document.createElement('div');
+  body.className = '__sm_body';
+  body.innerHTML = html;
+
+  header.appendChild(title);
+ header.appendChild(closeBtn);
+  modal.appendChild(header);
+  modal.appendChild(body);
+
+  // add to DOM
+  previousActive = document.activeElement;
+  document.body.appendChild(overlay);
+  document.body.appendChild(modal);
+
+  // close on ESC
+  document.addEventListener('keydown', onKeyDown, true);
+
+  // focus close button for accessibility
+  closeBtn.focus();
+
+  // prevent clicks inside modal from closing via overlay (belt & braces)
+  modal.addEventListener('click', (e) => e.stopPropagation());
+
+  // return a handle if you want to close programmatically
+  return { close: closeModal, overlay, modal, body };
+}
+let previousActive = null;
+</script>
+
+
+
+
 
 </body>
 </html>
