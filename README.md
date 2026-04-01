@@ -9,21 +9,21 @@ Instead of writing html code, users describe each component using (relatively) p
 
 Each new component description must start with ##. 
 
-The format is: ##component_name | Label or text | Further options
+The format is: `##component_name | Label or text | Further options`
 
 Returns are allowed so you can write multiple paragraphs of content, e.g.
-##p | This is simple paragraph of text.
+`##p | This is part of a simple paragraph of text.
 
-And so is this.
+And so is this.`
 
 Components with repeating elements, like the summary list, table or check answers components work like this:
-##component_name | Label or text | column value:column value:column value
+`##component_name | Label or text | column value:column value:column value`
 
 You can provide basic layout using Row and Column. You can define column width using the format 'Column|width' e.g. Column|100 will be full width, Column|50 will be 50%.
 
 Once you're happy with the html, use the control below to copy it to the clipboard, then you can add it to your prototype.
 
-For supported components (last updated: 2nd Mar 2026), see below.
+**Supported components**
 
 | Component     | Syntax                                                                                                         | Notes                                                                                                                    |
 | ------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
@@ -61,3 +61,38 @@ For supported components (last updated: 2nd Mar 2026), see below.
 | hr            | hr                                                                                                             |                                                                                                                          |
 | spacer        | spacer\|height\|background color                                                                               | Provides an empty div for cheeky padding. Colour is optional, defaults to transparent                                    |
 | comment       | comment\|Text here                                                                                             | Appears as a comment in the html, not visible to end users                                                               |
+
+
+**Conditional reveals**
+Create a conditional reveal from a radio button or checkbox by specifying an ID which you can then attach to a _hidden\_component_ e.g.  
+  
+`##radios|Where do you live?|At home|At University|In a box:size1 `
+`##hidden_input|How big is the box?|size1`  
+  
+will reveal the input box defined as 'size1' when the radio button 'In a box' is clicked.  
+  
+Add more than one component with the same id and they will all be revealed.  
+  
+Add different ids to different radios and checkboxes to reveal different components. e.g.    
+`##radios|Where do you live?|At home:home1|At University:uni1|In a box:box1`  \
+`##hidden_p|Who do you live with?|home1 `  \
+`##hidden_checkbox|Mum|home1 `  \
+`##hidden_checkbox|Dad|home1 `  \
+`##hidden_checkbox|Carers|home1 `  \
+`##hidden_date|When did you start?|uni1`   \
+`##hidden_input|How big is the box?(Tell us roughly)|box1    `  
+  
+Supported components:  
+`hidden_input, hidden_textarea, hidden_radio, hidden_checkbox, hidden_date, hidden_p, hidden_button_p, hidden_button_s, hidden_h2, hidden_h3`  
+  
+Important note: conditional reveals only work when _all_ the IDs and hidden components have been specified. If its not working check you have at least one hidden component for every ID specified in the radio or checkox components.
+
+**Error summaries and error states**  
+Put an input component into an error state by appending 'Error:error message' to the component label e.g.  
+  
+`##input|What is your name? (Include any middle names) Error: Please enter your full name`
+`##date|When did you arrive (Give the exact date) Error: Tell us when you arrived`  
+  
+will display the component label, the hint, will create an error summary box at the top of the page and link to each component in error state.
+
+
