@@ -561,6 +561,9 @@ radios: (label, opts) => {
   `;
 
   processed.forEach((item, i) => {
+  if (item.display == "or") {
+    html += `<div class="govuk-radios__divider">or</div>`;
+  } else {
     const inputId = `${label}-${i}`;
     const revealAttr = item.revealId ? ` data-aria-controls="conditional-${item.revealId}"` : "";
 
@@ -574,7 +577,7 @@ radios: (label, opts) => {
           <label class="govuk-label govuk-radios__label"
                  for="${inputId}">${item.display}</label>
         </div>
-    `;
+    `};
 
 
 
@@ -1256,34 +1259,19 @@ const errors = errorElements.map(p => ({
   // Inject at the top of <body>
   output.insertAdjacentHTML("afterbegin", summaryHtml);
 
- 
+
 
   initAll();
   copyBtn.disabled = false; // enable copy button after build
+   // top and tail with comments
+const startComment = document.createComment("start of auto-generated html");
+const endComment = document.createComment("end of auto-generated html");
+output.insertBefore(startComment, output.firstChild);
+output.appendChild(endComment);
+
 }
 
-// copyBtn.addEventListener("click", () => {
-//   // Copy ONLY the generated inner HTML (not the surrounding container)
-//   const generatedHTML = output.innerHTML;
-//   
-//   
-// const styleBlocks = Array.from(document.querySelectorAll("style"))
-//     .map(style => style.outerHTML)
-//     .join("\n\n");
-// 
-//   // Combine styles + HTML
-//   const combined = `${styleBlocks}\n\n<div>\n${generatedHTML}\n</div>`;
-// 
-// 
-//   navigator.clipboard.writeText(combined).then(() => {
-//     const original = copyBtn.textContent;
-//     copyBtn.textContent = "Copied!";
-// 
-//     setTimeout(() => {
-//       copyBtn.textContent = original;
-//     }, 2000);
-//   });
-// });
+
 
 copyBtn.addEventListener("click", () => {
   // Clone the generated output
