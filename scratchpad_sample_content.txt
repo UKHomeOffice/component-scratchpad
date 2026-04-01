@@ -30,16 +30,22 @@ Each component in the GOV.UK Design System has guidance on its use and coded exa
 ##textarea|Other notes (This has a 'rows' setting of 6)|6
 ##End Column
 ##End Row
-##h3|And now... something in 3 columns
+##h3|And now... something in three columns
 ##Row
-##Column|33
+##Column|25
 ##checkboxes|Support needed|Housing|Medical|Other
 ##End Column
-##Column|33
+##Column|25
 ##radios|Choose size|Small|Medium|Large
 ##End Column
-##Column|33
-##radios|Choose cost|Cheap|Medium|Pricey
+##Column|50
+##radios|Choose cost (This reveals more)|Cheap:chp1|Medium:med1|Pricey:pr1
+##hidden_p|What's cheap?|chp1
+##hidden_checkbox|1 - 10|chp1
+##hidden_checkbox|11-20|chp1
+##hidden_checkbox|21-30|chp1
+##hidden_textarea|Give us your definition of 'medium'|med1
+##hidden_date|When did you start needing the finer things in life?|pr1
 ##End Column
 ##End Row
 ##p|We used an hr earlier in the page, you can also used 'spacers' and even colour them in:
