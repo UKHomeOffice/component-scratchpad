@@ -36,7 +36,7 @@ Original version Feb 27th, 2026 by Ian Smith.
 
 <div class="govuk-header" style="padding-top:20px">
   <div class="govuk-header__container govuk-width-container">
-  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 1.8)</h1>
+  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 1.9)</h1>
    </div>
   </div>
   
@@ -82,7 +82,6 @@ Original version Feb 27th, 2026 by Ian Smith.
 			
 				You can provide basic layout using <code class="showCode">Row</code> and <code class="showCode">Column</code>. You can define column width using the format 'Column|width' e.g. <code class="showCode">Column|100</code> will be full width,  <code class="showCode">Column|50</code> will be 50%.<br><br>
 				Once you're happy with the html, use the control below to copy it to the clipboard, then you can add it to your prototype.<br><br>
-				For supported components as of 2 Mar 2026, see below.
 			</div>
   </details>
 
@@ -169,9 +168,10 @@ Original version Feb 27th, 2026 by Ian Smith.
 ##hidden_checkbox|Carers|home1<br>
 ##hidden_date|When did you start?|uni1<br>
 ##hidden_input|How big is the box?(Tell us roughly)|box1<br>
+##hidden_select|How rough is that?(Be honest)||Slightly|Very|Extremely|box1<br>
 </code>
 <br><br>
-Supported components:<br><code class="showCode">hidden_input, hidden_textarea, hidden_radio, hidden_checkbox, hidden_date, hidden_p, hidden_button_p, hidden_button_s, hidden_h2, hidden_h3 </code>
+Supported components:<br><code class="showCode">hidden_input, hidden_textarea, hidden_radio, hidden_checkbox, hidden_date, hidden_select, hidden_p, hidden_button_p, hidden_button_s, hidden_h2, hidden_h3 </code>
 <br><br>Important note: conditional reveals only work when <i>all</i> the IDs and hidden components have been specified. If its not working check you have at least one hidden component for every ID specified in the radio or checkox components.
 
 			</div>
@@ -590,7 +590,7 @@ if (item.revealId && window.hiddenComponents && window.hiddenComponents[item.rev
     const hidden = hiddens[i];
     const key = hidden.type.replace("hidden_", "");
     if (COMPONENTS[key]) {
-      hiddenHtml += COMPONENTS[key](hidden.label, []);
+      hiddenHtml += COMPONENTS[key](hidden.label, hidden.values, []);
     }
   }
 
@@ -678,7 +678,7 @@ if (item.revealId && window.hiddenComponents && window.hiddenComponents[item.rev
     const hidden = hiddens[i];
     const key = hidden.type.replace("hidden_", "");
     if (COMPONENTS[key]) {
-      hiddenHtml += COMPONENTS[key](hidden.label, []);
+      hiddenHtml += COMPONENTS[key](hidden.label, hidden.values, []);
     }
   }
 
@@ -781,6 +781,7 @@ const [rawMain, error] = label.split("Error:");
 // now look for a hint in whats left
 const [splitMain, rawHint] = rawMain.split("(");
 const main = splitMain.trim();
+
 
 const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
   return `
@@ -1056,22 +1057,34 @@ function removeHiddenLines(text) {
     const trimmed = line.trim();
 
     // Check if line begins with ##hidden_
-    if (/^##hidden_(radio|checkbox|input|textarea|date|upload|button_p|button_s|p|h1|h2|h3)\b/i.test(trimmed)) {
+    if (/^##hidden_(radio|checkbox|input|textarea|date|upload|select|button_p|button_s|p|h1|h2|h3)\b/i.test(trimmed)) {
 
-      // Split by |   →  [ "##hidden_xxx", "Label", "elementId" ]
-      const parts = trimmed.split("|").map(s => s.trim());
+//       // Split by |   →  [ "##hidden_xxx", "Label", "elementId" ]
+//       const parts = trimmed.split("|").map(s => s.trim());
+// 
+//       if (parts.length >= 3) {
+//         const typeFull = parts[0];          // e.g. "##hidden_radio"
+//         const label    = parts[1];          // label text
+//         const id       = parts[2];          // element id
 
-      if (parts.length >= 3) {
-        const typeFull = parts[0];          // e.g. "##hidden_radio"
-        const label    = parts[1];          // label text
-        const id       = parts[2];          // element id
+// Split by | → variable length array
+const parts = trimmed.split("|").map(s => s.trim());
+
+if (parts.length >= 3) {
+  const typeFull = parts[0];                 // item 1
+  const label    = parts[1];                 // item 2
+  const id       = parts[parts.length - 1];  // last item
+  const values = parts.length > 3
+    ? parts.slice(2, -1)
+    : [];
+
 
         // Normalised type without leading ##
         const type = typeFull.replace(/^##/, "");
 
         // Stash globally
        //  window.hiddenComponents[id] = { type, label, id };
-        (window.hiddenComponents[id] ||= []).push({ type, label, id });
+        (window.hiddenComponents[id] ||= []).push({ type, label, id, values });
       }
 
       // Do NOT keep this line → skip
@@ -1193,6 +1206,8 @@ line = line.replace(/<br>$/, "");
     const type = parts[0].toLowerCase();
     const label = parts[1] || "";
     const options = parts.slice(2);
+
+
 
     // call this function in a constant to go through every possible function,
     // and add either the correct html or the error message
@@ -1328,14 +1343,15 @@ a|Text here|href
 input|Label here (Optional hint)
 textarea|Label here (Optional hint)|Rows
 date|Label here (Optional hint)
-radios|Label here (Optional hint) |Radio 1|Radio 2 |...final radio
-checkboxes|Label here (Optional hint)|checkbox 1|checkbox 2|...final checkbox
-select|Label here (Optional hint)|option 1|option 2|...final option
+radios|Label here (Optional hint) |Radio 1|Radio 2 |final radio
+checkboxes|Label here (Optional hint)|checkbox 1|checkbox 2|final checkbox
+select|Label here (Optional hint)|value 1|value 2|final option
 hidden_input|Label here|ID
 hidden_textarea|Label here|ID
 hidden_radio|Label here|ID
 hidden_checkbox|Label here|ID
 hidden_date|Label here|ID
+hidden_select|Label here|value 1|value 2|value 3|final value|ID
 hidden_p|Label here|ID
 hidden_button_p|Label here|ID
 hidden_button_s|Label here|ID
