@@ -81,9 +81,11 @@ Add different ids to different radios and checkboxes to reveal different compone
 `##hidden_checkbox|Carers|home1 `  \
 `##hidden_date|When did you start?|uni1`   \
 `##hidden_input|How big is the box?(Tell us roughly)|box1    `  
+`##hidden_select|How rough is that?(Be honest)||Slightly|Very|Extremely|box1`
+
   
 Supported components:  
-`hidden_input, hidden_textarea, hidden_radio, hidden_checkbox, hidden_date, hidden_p, hidden_button_p, hidden_button_s, hidden_h2, hidden_h3`  
+`hidden_input, hidden_textarea, hidden_radio, hidden_checkbox, hidden_date, hidden_select, hidden_p, hidden_button_p, hidden_button_s, hidden_h2, hidden_h3`  
   
 Important note: conditional reveals only work when _all_ the IDs and hidden components have been specified. If its not working check you have at least one hidden component for every ID specified in the radio or checkox components.
 
