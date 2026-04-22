@@ -5,13 +5,13 @@ Original file and repo created 2nd March 2026 by Ian Smith.
 
 Use this tool to quickly create html content for pages based on gov.uk components.
 
-Instead of writing html code, users describe each component using (relatively) plain language.
+Instead of writing html code, describe each component using (relatively) plain language called scratchdown.
 
 Each new component description must start with ##. 
 
 The format is: `##component_name | Label or text | Further options`
 
-Returns are allowed so you can write multiple paragraphs of content, e.g.
+Returns are permitted, allowing multiple paragraphs of content e.g.
 `##p | This is part of a simple paragraph of text.
 
 And so is this.`
@@ -19,7 +19,7 @@ And so is this.`
 Components with repeating elements, like the summary list, table or check answers components work like this:
 `##component_name | Label or text | column value:column value:column value`
 
-You can provide basic layout using Row and Column. You can define column width using the format 'Column|width' e.g. Column|100 will be full width, Column|50 will be 50%.
+Provide basic layout using Row and Column. Define column width using the format 'Column|width' e.g. Column|100 will be full width, Column|50 will be 50%.
 
 Once you're happy with the html, use the control below to copy it to the clipboard, then you can add it to your prototype.
 
