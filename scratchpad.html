@@ -72,15 +72,15 @@ Original version Feb 27th, 2026 by Ian Smith.
         <span class="govuk-details__summary-text">How it works</span>
            </summary>
 			<div class="govuk-details__text" id="how-it-works">
-				 Instead of writing html code, describe each component using (relatively) plain language.<br><br>
+				 Instead of writing html code, describe each component using (relatively) plain language, called <i>scratchdown</i>.<br><br>
 				 Each new component description must start with ##. The format is:<br>
 				 <code class="showCode">##component_name | Label or text | Further options</code><br><br>
-				 Returns are allowed so you can write multiple paragraphs of content, e.g.<br>
+				 Returns are permitted,allowing multiple paragraphs of content e.g.<br>
 				 <code class="showCode">##p | This is part of a simple paragraph of text.<br><br> And so is this.</code><br><br>
 				 Components with repeating elements, like the summary list, table or check answers components work like this:<br>
 				 <code class="showCode">##component_name | Label or text | column value:column value:column value</code><br><br>
 			
-				You can provide basic layout using <code class="showCode">Row</code> and <code class="showCode">Column</code>. You can define column width using the format 'Column|width' e.g. <code class="showCode">Column|100</code> will be full width,  <code class="showCode">Column|50</code> will be 50%.<br><br>
+				Provide basic layout using <code class="showCode">Row</code> and <code class="showCode">Column</code>. Define column width using the format 'Column|width' e.g. <code class="showCode">Column|100</code> will be full width,  <code class="showCode">Column|50</code> will be 50%.<br><br>
 				Once you're happy with the html, use the control below to copy it to the clipboard, then you can add it to your prototype.<br><br>
 			</div>
   </details>
@@ -1057,7 +1057,7 @@ function removeHiddenLines(text) {
     const trimmed = line.trim();
 
     // Check if line begins with ##hidden_
-    if (/^##hidden_(radio|checkbox|input|textarea|date|upload|select|button_p|button_s|p|h1|h2|h3)\b/i.test(trimmed)) {
+    if (/^##hidden_(radio|checkbox|input|textarea|date|upload|select|button_p|button_s|p|h1|h2|h3|spacer)\b/i.test(trimmed)) {
 
 //       // Split by |   →  [ "##hidden_xxx", "Label", "elementId" ]
 //       const parts = trimmed.split("|").map(s => s.trim());
