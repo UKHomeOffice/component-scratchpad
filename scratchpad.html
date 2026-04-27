@@ -17,6 +17,10 @@ Original version Feb 27th, 2026 by Ian Smith.
 <!-- include GOV.UK frontend -->
 <link rel="stylesheet" href="https://unpkg.com/govuk-frontend@6.0.0/dist/govuk/govuk-frontend.min.css"/>
 
+<!-- include HO design system frontend -->
+<link rel="stylesheet" href="https://design.homeoffice.gov.uk/public/css/styles.ccc5ae9b.css"/>
+
+
 
 <style>
   body {padding-bottom: 200px;}
@@ -28,6 +32,17 @@ Original version Feb 27th, 2026 by Ian Smith.
   .specHeader {font-size:12pt; vertical-align:top; border: 2px solid white;background-color:#eee;}
   .specRow {font-size:12pt; vertical-align:top; border: 0px solid white;background-color:#fff;}
   .specRow2 {font-size:12pt;vertical-align:top; border: 0px solid white;background-color:#eee;}
+  
+.govuk-width-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  
+padding-left: 20px;
+  padding-right: 20px;
+
+}
+
 </style>
 </head>
 
@@ -36,7 +51,7 @@ Original version Feb 27th, 2026 by Ian Smith.
 
 <div class="govuk-header" style="padding-top:20px">
   <div class="govuk-header__container govuk-width-container">
-  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 1.9)</h1>
+  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 2.0)</h1>
    </div>
   </div>
   
@@ -179,24 +194,55 @@ Supported components:<br><code class="showCode">hidden_input, hidden_textarea, h
   
     
     
-    
+   
 <!-- content suggestion on/off checkbox -->
 <div class="govuk-form-group">
-<div class="govuk-form-group">
+
+<div class="govuk-form-group"> 
+
+<table border=0 width="100%">
+<tr>
+<td style="v-align:bottom">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item govuk-checkboxes--small">
       <input class="govuk-checkboxes__input govuk-checkboxes--small" id="show-suggestions" type="checkbox" checked>
       <label class="govuk-label govuk-checkboxes__label" for="show-suggestions">
         Show suggestions (type the component name without the ##)
       </label>
+      
     </div>
+   
+  
   </div>
+  </td>
+  <td style="v-align:bottom">
+  <label for="label-size" style="font-size:14pt">
+    Label size:&nbsp;
+  </label>
+  <select class="govuk-select" style="min-width:6em" id="label-size" name="label-size">
+    <option value="govuk-body" selected>Body</option>
+    <option value="govuk-label--s">Small</option>
+    <option value="govuk-label--m">Medium</option>
+    <option value="govuk-label--l">Large</option>
+  </select>
+
+  </td>
+	</tr>
+	</table>  
 </div>
   
   
 <!--  actual scratchpad -->
 <textarea class="govuk-textarea" id="definition" rows="5"></textarea>
 </div>
+
+
+ 
+
+
+ 
+ 
+ 
 
 <!-- empty holder for typeahead, use <ul> as then easier to list results -->
 <ul id="typeahead-suggestions"
@@ -288,20 +334,32 @@ Supported components:<br><code class="showCode">hidden_input, hidden_textarea, h
 
 <!-- scripts! -->
 <script type="module">
+
+
+
+function getLabelSize() {
+  return document.getElementById("label-size").value;
+}
+
+
+
 const copyBtn = document.getElementById("copyBtn");
 
 import { initAll } from "https://unpkg.com/govuk-frontend@6.0.0/dist/govuk/govuk-frontend.min.js";
 initAll();
 
+
+
 // components and their code fragments, user content passed in via 'label' and 'opts'
-// add new component here but be careful!
+// add new components here but be careful!
 const COMPONENTS = {
-   
+
+
   
 // h1,h2,h3 all have optional caption
   h1: (label,opts) => `
    ${opts[0] ? `<span class="govuk-caption-xl">${opts[0]}</span>` : ""}
-    <h1 class="govuk-heading-xl" style="color:${opts[0]||"black"}">${label}</h1>`,
+    <h1 class="govuk-heading-xl" style="color:${opts[1]||"black"}">${label}</h1>`,
 
   h2: (label,opts) => `
   ${opts[0] ? `<span class="govuk-caption-l">${opts[0]}</span>` : ""}
@@ -340,33 +398,18 @@ const main = splitMain.trim();
 
 const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
 
+//  now get the label size we want
+const labSize = getLabelSize();
+
+
   return `
     <div class="govuk-form-group  ${error ? ` govuk-form-group--error` : ""}">
-      <label class="govuk-label">${main}</label>
+      <label class="govuk-label ${labSize}">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
        ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
       <input class="govuk-input ${error ? ` govuk-input--error` : ""}" type="text">
     </div>`;
     },
-
-
-// // version up to 5/3/26
-// input: (label) => {
-// // const [main, hint] = label.split(":").map(s => s.trim());
-// 
-// const [rawMain, rawHint] = label.split("(");
-// const main = rawMain.trim();
-// const prehint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
-// const [hint,error] = prehint.split("Error:");
-// 
-//   return `
-//     <div class="govuk-form-group  ${error ? ` govuk-form-group--error` : ""}">
-//       <label class="govuk-label">${main}</label>
-//       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-//        ${error ? `<p id="xxx-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
-//       <input class="govuk-input ${error ? ` govuk-input--error` : ""}" type="text">
-//     </div>`;
-//     },
 
 
 
@@ -380,29 +423,19 @@ const main = splitMain.trim();
 
 const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
 
+//  now get the label size we want
+const labSize = getLabelSize();
+
 
   return `
     <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
-      <label class="govuk-label">${main}</label>
+      <label class="govuk-label ${labSize}">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
        ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
        <textarea class="govuk-textarea ${error ? ` govuk-textarea--error` : ""}" rows="${parseInt(opts[0], 10) > 0 ? parseInt(opts[0], 10) : "3"}"></textarea>
     </div>`;
     },
 
-// //version up to 5/3/26
-// textarea: (label,opts) => {
-// const [rawMain, rawHint] = label.split("(");
-// const main = rawMain.trim();
-// const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
-// 
-//   return `
-//     <div class="govuk-form-group">
-//       <label class="govuk-label">${main}</label>
-//       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-//        <textarea class="govuk-textarea" rows="${opts[0]||"3"}"></textarea>
-//     </div>`;
-//     },
 
 character_count: (label,opts) => {
 const [rawMain, rawHint] = label.split("(");
@@ -412,7 +445,7 @@ const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
   return `
     <div class="govuk-form-group govuk-character-count" data-module="govuk-character-count" data-maxlength="${opts[0]||"200"}">
 <h1 class="govuk-label-wrapper">
-    <label class="govuk-label" for="with-hint">
+    <label class="govuk-label ${labSize}" for="with-hint">
       ${main}
     </label>
 </h1>
@@ -437,10 +470,14 @@ const main = splitMain.trim();
 
 const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
 
+//  now get the label size we want
+const labSize = getLabelSize();
+
+
 return`
 <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
   <fieldset class="govuk-fieldset" role="group" aria-describedby="passport-issued-hint">
-     <label class="govuk-label">${main}</label>
+     <label class="govuk-label ${labSize}">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
    ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
  <div class="govuk-date-input" id="passport-issued">
@@ -491,6 +528,9 @@ radio: (label) => {
 //appends a unique number to each radio ID so that they work if you have more than one hidden radio
 const thisID = `${label.replace(/\s+/g,"_")}_${Date.now().toString(36)}_${(window.__idCounter=(window.__idCounter||0)+1).toString(36)}`;
 const thisName = `${label.replace(/\s+/g,"_")}`;
+//  now get the label size we want
+const labSize = getLabelSize();
+
 
 return`
 <div class="govuk-radios__item">
@@ -510,6 +550,9 @@ checkbox: (label) => {
 //appends a unique number to each radio ID so that they work if you have more than one hidden radio
 const thisID = `${label.replace(/\s+/g,"_")}_${Date.now().toString(36)}_${(window.__idCounter=(window.__idCounter||0)+1).toString(36)}`;
 const thisName = `${label.replace(/\s+/g,"_")}`;
+//  now get the label size we want
+const labSize = getLabelSize();
+
 
 return`
 <div class="govuk-checkboxes__item">
@@ -533,6 +576,8 @@ radios: (label, opts) => {
   const [splitMain, rawHint] = rawMain.split("(");
   const main = splitMain.trim();
   const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
+  //  now get the label size we want
+const labSize = getLabelSize();
 
   // Process opts:
   // If an option contains a colon, strip text after colon (use as ID)
@@ -550,7 +595,7 @@ radios: (label, opts) => {
   let html = `
   <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
     <fieldset class="govuk-fieldset">
-      <label class="govuk-label">${main}</label>
+      <label class="govuk-label ${labSize}">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
       ${
         error
@@ -622,6 +667,9 @@ checkboxes: (label, opts) => {
   const [splitMain, rawHint] = rawMain.split("(");
   const main = splitMain.trim();
   const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
+  //  now get the label size we want
+const labSize = getLabelSize();
+
 
   // Process opts:
   // If an option contains a colon, strip text after colon (use as ID)
@@ -639,7 +687,7 @@ checkboxes: (label, opts) => {
   let html = `
   <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
     <fieldset class="govuk-fieldset">
-      <label class="govuk-label">${main}</label>
+      <label class="govuk-label ${labSize}">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
       ${
         error
@@ -703,77 +751,7 @@ if (item.revealId && window.hiddenComponents && window.hiddenComponents[item.rev
 },  
 
 
-// checkboxes: (label, opts) =>  {
-// // first see if there is an error string, split it out if there is
-// const [rawMain, error] = label.split("Error:");
-// 
-// // now look for a hint in whats left
-// const [splitMain, rawHint] = rawMain.split("(");
-// const main = splitMain.trim();
-// 
-// const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
-//   return `
-//   <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
-//     <fieldset class="govuk-fieldset">
-//       <label class="govuk-label">${main}</label>
-//       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-// ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
-//       <div class="govuk-checkboxes">
-//         ${opts.map((o,i)=>`
-//           <div class="govuk-checkboxes__item">
-//             <input class="govuk-checkboxes__input" id="${label}-${i}" type="checkbox" value="${o}">
-//             <label class="govuk-label govuk-checkboxes__label" for="${label}-${i}">${o}</label>
-//           </div>`).join("")}
-//       </div>
-//     </fieldset>
-//      </div>`;
-//     },
     
-// //current up to 5/3/26   
-// radios: (label, opts) => {
-//  const [rawMain, rawHint] = label.split("(");
-// const main = rawMain.trim();
-// const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
-//   return `
-//   <div class="govuk-form-group">
-//     <fieldset class="govuk-fieldset">
-//      <label class="govuk-label">${main}</label>
-//        ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-//       <div class="govuk-radios govuk-radios">
-//         ${opts.map((o,i)=>`
-//           <div class="govuk-radios__item">
-//             <input class="govuk-radios__input" id="${label}-${i}" name="${label}" type="radio" value="${o}">
-//             <label class="govuk-label govuk-radios__label" for="${label}-${i}">${o}</label>
-//           </div>`).join("")}
-//       </div>
-//     </fieldset>
-//     </div>`;
-//     },
-        
-    
-    
-// //current up to 5/3/26    
-//  checkboxes: (label, opts) =>  {
-// const [rawMain, rawHint] = label.split("(");
-// const main = rawMain.trim();
-// const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
-//   return `
-//   <div class="govuk-form-group">
-//     <fieldset class="govuk-fieldset">
-//       <label class="govuk-label">${main}</label>
-//       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-//       <div class="govuk-checkboxes">
-//         ${opts.map((o,i)=>`
-//           <div class="govuk-checkboxes__item">
-//             <input class="govuk-checkboxes__input" id="${label}-${i}" type="checkbox" value="${o}">
-//             <label class="govuk-label govuk-checkboxes__label" for="${label}-${i}">${o}</label>
-//           </div>`).join("")}
-//       </div>
-//     </fieldset>
-//      </div>`;
-//     },
-
-
 select: (label, opts) => {
 // first see if there is an error string, split it out if there is
 const [rawMain, error] = label.split("Error:");
@@ -782,11 +760,14 @@ const [rawMain, error] = label.split("Error:");
 const [splitMain, rawHint] = rawMain.split("(");
 const main = splitMain.trim();
 
-
 const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
+
+//  now get the label size we want
+const labSize = getLabelSize();
+
   return `
     <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
-      <label class="govuk-label">${main}</label>
+      <label class="govuk-label ${labSize}">${main}</label>
     ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
 ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
         <select class="govuk-select ${error ? ` govuk-select--error` : ""}">
@@ -795,20 +776,6 @@ ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message">
     </div>`;
     },
 
-// //current up to 5/3/26  
-// select: (label, opts) => {
-// const [rawMain, rawHint] = label.split("(");
-// const main = rawMain.trim();
-// const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
-//   return `
-//     <div class="govuk-form-group">
-//       <label class="govuk-label">${main}</label>
-//     ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-//         <select class="govuk-select">
-//         ${opts.map(o => `<option>${o}</option>`).join("")}
-//       </select>
-//     </div>`;
-//     },
 
 
   details: (label, opts) => `
@@ -823,13 +790,17 @@ ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message">
     `<div class="govuk-inset-text">${label}</div>`,
 
 //file upload
-upload: (label) =>
-`<div class="govuk-form-group">
-  <label class="govuk-label" for="file-upload-1">
+upload: (label) => {
+//  now get the label size we want
+const labSize = getLabelSize();
+
+return `<div class="govuk-form-group">
+  <label class="govuk-label ${labSize}" for="file-upload-1">
     ${label}
   </label>
   <input class="govuk-file-upload" id="file-upload-1" name="fileUpload1" type="file">
-</div>`,
+</div>`;}
+,
 
 
   warning: (label) =>
@@ -843,9 +814,51 @@ upload: (label) =>
       <h2 class="govuk-panel__title">${label}</h2>
       <div class="govuk-panel__body">${opts[0]||""}</div>
     </div>`,
+    
+  alert_ho: (label, opts) =>
+    `<div class="hods-alert hods-alert--${opts[1]||"info"}">
+  <h2 class="hods-alert__heading">
+    ${label}
+  </h2>
+  <p>
+    ${opts[0]||""}
+  </p>
+</div>`,
+
+  spinner_ho: (label, opts) =>
+    `<div class="hods-loading-spinner" role="status">
+  <div class="hods-loading-spinner__spinner" style="width:${opts[0]|80}px;height:${opts[0]|80}px"></div>
+  <div class="hods-loading-spinner__content">
+    <h1 class="govuk-heading-m">
+        ${label}
+    </h1>
+  </div>
+</div>`,
+    
+    
 
   tag: (label, opts) =>
     `<strong class="govuk-tag govuk-tag--${opts[0]||"blue"}">${label}</strong>`,
+
+
+// ho office timeline - content rows delimited by |,  content within a row by :
+  timeline_ho: (label, opts) => `
+    <h3 class="govuk-heading-m">${label}</h3>
+    <div class="hods-timeline">
+      ${opts.map(line => {
+        const [t,a,d,desc] = line.split(":");
+        return `
+        <div class="hods-timeline__item">
+    <h2 class="hods-timeline__title">${t}</h2>
+    ${a ? `<p class="hods-timeline__by">by ${a}</p>` : ""}
+    <p class="hods-timeline__date">
+      <time class="hods-date-time" datetime="2021-03-15T10:04:00.000Z">${d}</time>
+    </p>
+    <p class="hods-timeline__description">${desc}</p>
+</div>
+`;
+      }).join("")}
+    </dl>`,
 
 // summarylist - content rows delimited by |,  content within a row by :
   summarylist: (label, opts) => `
@@ -1113,10 +1126,8 @@ const output = document.getElementById("output");
 function buildPage() {
   output.innerHTML = "";
 
-//   const lines = document.getElementById("definition")
-//     .value.split("##")
-//     .map(l => l.trim())
-//     .filter(l => l.length > 0);
+
+
 
 
 
@@ -1357,6 +1368,9 @@ hidden_button_p|Label here|ID
 hidden_button_s|Label here|ID
 hidden_h2|Label here|ID
 hidden_h3|Label here|ID
+alert_ho|Label here|Description|info/error/success
+spinner_ho|Label here
+timeline_ho|Label here|Title1:Author1:Date1:Description1|Title2:Author2:Date2:Description2|
 goback
 goback|Text here
 button|Label here|font colour|background colour
