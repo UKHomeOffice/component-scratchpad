@@ -382,7 +382,7 @@ const COMPONENTS = {
     <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l"/>`,
  
   spacer: (label, opts) => `
-    <div class="govuk-form-group" style="height:${label}px;background-color:${opts[0]||"transparent"}">
+    <div class="govuk-form-group" style="padding:0x;margin:0px;height:${label}px;background-color:${opts[0]||"transparent"}">
       &nbsp;
     </div>`, 
        
@@ -464,29 +464,7 @@ const labSize = getLabelSize();
     },
     
 
-// character_count_orig: (label,opts) => {
-// const [rawMain, rawHint] = label.split("(");
-// const main = rawMain.trim();
-// const boxid = rawMain.replace(/[^a-zA-Z0-9]+/g, "-");
-// const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
-// //  now get the label size we want
-// const labSize = getLabelSize();
-// 
-// 
-//   return `
-//     <div class="govuk-form-group govuk-character-count" data-module="govuk-character-count" data-maxlength="${Number.isInteger(+opts[1]) && +opts[1] > 0 ? opts[1] : '200'}">
-// <h1 class="govuk-label-wrapper">
-//     <label class="govuk-label ${labSize}" for="${boxid}">
-//       ${main}
-//     </label>
-// </h1>
-//       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-//   <textarea class="govuk-textarea govuk-js-character-count" id="${boxid}" name="${boxid}" rows="${Number.isInteger(+opts[0]) && +opts[0] > 0 ? opts[0] : '5'}" aria-describedby="${boxid}"></textarea>
-//     <div id="${boxid}-info" class="govuk-hint govuk-character-count__message">
-//     You can enter up to ${opts[1]||"200"} characters
-//   </div>
-// </div>`;
-//     },
+
 
 
 date: (label,opts, context = {}) => {
@@ -895,9 +873,12 @@ return `<div class="govuk-form-group">
     </dl>`,
 
 // summarylist - content rows delimited by |,  content within a row by :
-  summarylist: (label, opts) => `
-    <h3 class="govuk-heading-m">${label}</h3>
-    <dl class="govuk-summary-list">
+  summarylist: (label, opts) =>  {
+ const labSize = getLabelSize();
+ 
+  return `
+     <label class="govuk-label ${labSize}">${label}</label>
+     <dl class="govuk-summary-list">
       ${opts.map(line => {
         const [k,v] = line.split(":");
         return `
@@ -906,7 +887,8 @@ return `<div class="govuk-form-group">
           <dd class="govuk-summary-list__value">${v}</dd>
         </div>`;
       }).join("")}
-    </dl>`,
+    </dl>`;
+    },
     
 
 listn: (str, opts) => {
@@ -1061,8 +1043,11 @@ const labSize = getLabelSize();
 
 // check your answers - content rows delimited by |,  content within a row by :
 
-checkanswers: (label, opts) => `
-    <h3 class="govuk-heading-m">${label}</h3>
+checkanswers: (label, opts) => {
+const labSize = getLabelSize();
+
+return `
+    <label class="govuk-label ${labSize}">${label}</label>
     <dl class="govuk-summary-list">
       ${opts.map(line => {
         const [k,v,l] = line.split(":");
@@ -1076,39 +1061,92 @@ checkanswers: (label, opts) => `
         </div>`;
       }).join("")}
     </dl>
-    `,
+    `;
+    },
+
+
+// tasklist_old: (label, opts) => `
+// 
+//     <h3 class="govuk-heading-m">${label}</h3>
+//     <ul class="govuk-task-list">
+//           
+//        ${opts.map(line => {
+// 
+//         const [m,h,s] = line.split(":");
+//         const [mainTitle, mainHint] = m.split("(");
+// const main = mainTitle.trim();
+// const hint = mainHint ? mainHint.replace(/\)$/, "").trim() : "";
+// const status = s.trim();
+//         return `
+//         <li class="govuk-task-list__item govuk-task-list__item--with-link">
+//     <div class="govuk-task-list__name-and-hint">
+//   ${status === 'Cannot be started' || status.charAt(0) === '['
+//   ? main 
+//   : `<a class="govuk-link govuk-task-list__link" href="${h || "#"}">${main}</a>`}
+//      <div id="${label}" class="govuk-task-list__hint">
+//         ${hint}
+//       </div>
+//        </div>
+//     <div class="govuk-task-list__status" id="${label}-status">    
+// ${status === 'Completed' || status.charAt(0) === '['
+//   ? status 
+//   : `<strong class="govuk-tag govuk-tag--${status === 'Cannot be started' || status.charAt(0) === '_' ? "grey" : "blue"}">${status}</strong>`}
+//     </div>
+//      </li>`;
+//       }).join("")}    
+//     </ul>`,
+    
 
 // task list, based on checkanswers - content rows delimited by |,  content within a row by :
 
-tasklist: (label, opts) => `
-    <h3 class="govuk-heading-m">${label}</h3>
-    <ul class="govuk-task-list">
-          
-       ${opts.map(line => {
+tasklist: (label, opts, context = {}) => {
+  // label size (blank if hidden)
+  const labSize = context.isHidden ? "" : getLabelSize();
 
-        const [m,h,s] = line.split(":");
+  // safe base for IDs (so we don't generate invalid/duplicate ids)
+  const baseId = (label || "tasklist")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return `
+    <label class="govuk-label ${labSize}">${label}</label>
+    <ul class="govuk-task-list">
+      ${opts.map((line, i) => {
+        const [m = "", h = "#", s = ""] = line.split(":");
         const [mainTitle, mainHint] = m.split("(");
-const main = mainTitle.trim();
-const hint = mainHint ? mainHint.replace(/\)$/, "").trim() : "";
-const status = s.trim();
+        const main = (mainTitle || "").trim();
+        const hint = mainHint ? mainHint.replace(/\)$/, "").trim() : "";
+        const status = (s || "").trim();
+
+        const hintId = `${baseId}-hint-${i}`;
+        const statusId = `${baseId}-status-${i}`;
+
+        const showAsPlainText = status === "Cannot be started" || status.charAt(0) === "[";
+        const showAsTag = !(status === "Completed" || status.charAt(0) === "[");
+        const tagColour = (status === "Cannot be started" || status.charAt(0) === "_") ? "grey" : "blue";
+
         return `
-        <li class="govuk-task-list__item govuk-task-list__item--with-link">
-    <div class="govuk-task-list__name-and-hint">
-  ${status === 'Cannot be started' || status.charAt(0) === '['
-  ? main 
-  : `<a class="govuk-link govuk-task-list__link" href="${h || "#"}">${main}</a>`}
-     <div id="${label}" class="govuk-task-list__hint">
-        ${hint}
-      </div>
-       </div>
-    <div class="govuk-task-list__status" id="${label}-status">    
-${status === 'Completed' || status.charAt(0) === '['
-  ? status 
-  : `<strong class="govuk-tag govuk-tag--${status === 'Cannot be started' || status.charAt(0) === '_' ? "grey" : "blue"}">${status}</strong>`}
-    </div>
-     </li>`;
-      }).join("")}    
-    </ul>`
+          <li class="govuk-task-list__item govuk-task-list__item--with-link">
+            <div class="govuk-task-list__name-and-hint">
+              ${showAsPlainText
+                ? main
+                : `<a class="govuk-link govuk-task-list__link" href="${h || "#"}">${main}</a>`}
+              ${hint ? `<div id="${hintId}" class="govuk-task-list__hint">${hint}</div>` : ""}
+            </div>
+            <div class="govuk-task-list__status" id="${statusId}">
+              ${showAsTag
+                ? `<strong class="govuk-tag govuk-tag--${tagColour}">${status}</strong>`
+                : status}
+            </div>
+          </li>`;
+      }).join("")}
+    </ul>
+  `;
+}
+    
+    
+    
 //  end of components   
 };
 
@@ -1216,13 +1254,25 @@ const lines = newSource
   let currentRow = null;
   let currentColumn = null;
   let mwidth = null;
+let mcolor = null;
 
   lines.forEach(line => {
   
 //remove any <br> at the very end of a string, as we dont need it
 line = line.replace(/<br>$/, "");
     /* ---- ROW START ---- */
-    if (line.toLowerCase() === "row") {
+    if (line.toLowerCase().startsWith("row|")) {
+     mcolor = line.split("|")[1];
+      if (mcolor == undefined){
+      mcolor = "";
+      }
+      currentRow = document.createElement("div");
+      currentRow.className = "gov-row";
+      currentRow.style.backgroundColor = mcolor;
+      return;
+    }
+    /* ---- ROW STAR 2 ---- */
+    if (line.toLowerCase().startsWith("row")) {
       currentRow = document.createElement("div");
       currentRow.className = "gov-row";
       return;
@@ -1454,18 +1504,19 @@ tag|Text here
 listb|item:item:item:item |spaced
 listn|item:item:item:item|spaced
 summarylist|Label|key1:value1|key2:value2|...final key:final value
-table|Label|row1value1:row1value2:row1value3... row1value10|row2value1:row2value2:row2value3... row2value10 |
-tablewheader|Label|row1value1:row1value2:row1value3... row1value10|row2value1:row2value2:row2value3... row2value10 |
+table|Label|row1value1:row1value2:row1value3... row1value10|row2value1:row2value2:row2value3... row2value10
+tablewheader|Label|row1value1:row1value2:row1value3... row1value10|row2value1:row2value2:row2value3... row2value10
 tabs|Label|Tab one|Tab two|Tab three|Tab four|Tab five
 checkanswers|Label|key1:value1:link1|key2:value2:link2|...final key:final value:final link
 tasklist|Label|Task name1:url:status|Task name2:url:status|...Final task name1:url:status
 row
+row|colour
 end row
 column
 column|width
 end column
 hr
-spacer|height|background color
+spacer|height|colour
 comment|Text here 
 `.trim();
 
