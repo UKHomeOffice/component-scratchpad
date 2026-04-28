@@ -939,59 +939,93 @@ listb: (str, opts) => {
   `;
 },
 
-// table - content rows delimited by |,  content within a row by :
 
-table: (label, opts) => `
-  <table class="govuk-table">
-    <caption class="govuk-table__caption govuk-table__caption--m">${label}</caption>
-    <tbody class="govuk-table__body">
-      ${opts
-        .map(line => {
-          const cells = line.split(":");   // split into however many items exist
-          return `
+
+// table 
+table: (label, opts, context = {}) => {
+  const labSize = context.isHidden ? "" : getLabelSize();
+  const main = label.trim();
+
+  const rowsHtml = opts
+    .map((line, index) => {
+      const cells = line.split(":");
+
+      // Body rows
+      return `
+        <tr class="govuk-table__row">
+          ${cells
+            .map(cell => `
+              <td class="govuk-table__cell">
+                ${cell || "&nbsp;"}
+              </td>
+            `)
+            .join("")}
+        </tr>`;
+    })
+    .join("");
+
+  return `
+    <table class="govuk-table">
+       <label class="govuk-label ${labSize}">${main}</label>
+      <tbody class="govuk-table__body">
+        ${rowsHtml}
+      </tbody>
+    </table>
+  `;
+},
+
+// table with first row as a header
+tablewheader: (label, opts, context = {}) => {
+  const labSize = context.isHidden ? "" : getLabelSize();
+  const main = label.trim();
+
+  const rowsHtml = opts
+    .map((line, index) => {
+      const cells = line.split(":");
+
+      // Header row
+      if (index === 0) {
+        return `
           <tr class="govuk-table__row">
             ${cells
-              .map(item => `<td class="govuk-table__cell">${item || " "}</td>`)
-              .join("")}
-          </tr>`;
-        })
-        .join("")}
-    </tbody>
-  </table>
-`,
-
-// table with first row as a header - other content rows delimited by |,  content within a row by :
-tablewheader: (label, opts) => `
-  <table class="govuk-table">
-    <caption class="govuk-table__caption govuk-table__caption--m">
-      ${label}
-    </caption>
-    <tbody class="govuk-table__body">
-      ${opts
-        .map((line, index) => {
-          const cells = line.split(":");
-
-          // First row = header, rest = standard row
-          const rowClass = index === 0
-            ? "govuk-table__header"
-            : "govuk-table__row";
-
-          return `
-          <tr class="${rowClass}">
-            ${cells
-              .map(item => `
-                <td class="govuk-table__cell">${item || " "}</td>
+              .map(cell => `
+                <th class="govuk-table__header" scope="col">
+                  ${cell || "&nbsp;"}
+                </th>
               `)
               .join("")}
           </tr>`;
-        })
-        .join("")}
-    </tbody>
-  </table>
-`,
+      }
+
+      // Body rows
+      return `
+        <tr class="govuk-table__row">
+          ${cells
+            .map(cell => `
+              <td class="govuk-table__cell">
+                ${cell || "&nbsp;"}
+              </td>
+            `)
+            .join("")}
+        </tr>`;
+    })
+    .join("");
+
+  return `
+    <table class="govuk-table">
+       <label class="govuk-label ${labSize}">${main}</label>
+      <tbody class="govuk-table__body">
+        ${rowsHtml}
+      </tbody>
+    </table>
+  `;
+},
 
 // tabs - tabs delimited by |
 tabs: (label, opts) => {
+//  get the label size we want 
+const labSize = getLabelSize();
+
    
  const listTabs = opts
   .map((item, indx) => `
@@ -1013,7 +1047,7 @@ tabs: (label, opts) => {
     .join("\n");
 
   return `
-  <h3 class="govuk-heading-m" fred="ff">${label}</h3>
+   <label class="govuk-label ${labSize}">${label}</label>
   <div class="govuk-tabs" data-module="govuk-tabs" jim="jim">
   <ul class="govuk-tabs__list">
       ${listTabs}
