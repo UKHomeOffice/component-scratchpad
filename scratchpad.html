@@ -22,16 +22,12 @@ Original version Feb 27th, 2026 by Ian Smith.
 
 
 
-<style>
+<style id="_scratch">
   body {padding-bottom: 200px;}
   #definition { width: 100%; height: 320px; font-family: monospace; }
   .component-block { margin: 4px 0; padding: 4px; border: 0px solid #b1b4b6;  }
   .gov-row { display: flex; flex-wrap: wrap; width: 100%; margin: 20px 0; }
   .gov-col { padding: 10px; }
-  .showCode{color:#444;background-color:#ddd}
-  .specHeader {font-size:12pt; vertical-align:top; border: 2px solid white;background-color:#eee;}
-  .specRow {font-size:12pt; vertical-align:top; border: 0px solid white;background-color:#fff;}
-  .specRow2 {font-size:12pt;vertical-align:top; border: 0px solid white;background-color:#eee;}
   
 .govuk-width-container {
   max-width: 1200px;
@@ -40,10 +36,17 @@ Original version Feb 27th, 2026 by Ian Smith.
   
 padding-left: 20px;
   padding-right: 20px;
-
 }
+</style>
+
+<style id="_internal">
+  .showCode{color:#444;background-color:#ddd}
+  .specHeader {font-size:12pt; vertical-align:top; border: 2px solid white;background-color:#eee;}
+  .specRow {font-size:12pt; vertical-align:top; border: 0px solid white;background-color:#fff;}
+  .specRow2 {font-size:12pt;vertical-align:top; border: 0px solid white;background-color:#eee;}
 
 </style>
+
 </head>
 
 <body class="govuk-template__body govuk-frontend-supported">
@@ -1438,7 +1441,8 @@ copyBtn.addEventListener("click", () => {
   // temp.querySelectorAll("[data-govuk-*-init]").forEach(...)
 
   // Rebuild the final HTML
-  const styleBlocks = Array.from(document.querySelectorAll("style"))
+  const styleBlocks = Array.from(document.querySelectorAll('style#_scratch'))
+//   const styleBlocks = Array.from(document.querySelectorAll("style"))
     .map(style => style.outerHTML)
     .join("\n\n");
 
