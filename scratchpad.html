@@ -51,7 +51,7 @@ padding-left: 20px;
 
 <div class="govuk-header" style="padding-top:20px">
   <div class="govuk-header__container govuk-width-container">
-  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 2.0)</h1>
+  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 2.1)</h1>
    </div>
   </div>
   
@@ -387,7 +387,7 @@ const COMPONENTS = {
     </div>`, 
        
 
-input: (label) => {
+input: (label,opts, context = {}) => {
 
 // first see if there is an error string, split it out if there is
 const [rawMain, error] = label.split("Error:");
@@ -398,8 +398,8 @@ const main = splitMain.trim();
 
 const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
 
-//  now get the label size we want
-const labSize = getLabelSize();
+//  now get the label size we want but not if this is a hidden component
+const labSize = context.isHidden ? "" : getLabelSize();
 
 
   return `
@@ -413,7 +413,7 @@ const labSize = getLabelSize();
 
 
 
-textarea: (label,opts) => {
+textarea: (label,opts,context = {}) => {
 // first see if there is an error string, split it out if there is
 const [rawMain, error] = label.split("Error:");
 
@@ -423,8 +423,8 @@ const main = splitMain.trim();
 
 const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
 
-//  now get the label size we want
-const labSize = getLabelSize();
+//  now get the label size we want but not if this is a hidden component
+const labSize = context.isHidden ? "" : getLabelSize();
 
 
   return `
@@ -464,32 +464,32 @@ const labSize = getLabelSize();
     },
     
 
-character_count_orig: (label,opts) => {
-const [rawMain, rawHint] = label.split("(");
-const main = rawMain.trim();
-const boxid = rawMain.replace(/[^a-zA-Z0-9]+/g, "-");
-const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
-//  now get the label size we want
-const labSize = getLabelSize();
+// character_count_orig: (label,opts) => {
+// const [rawMain, rawHint] = label.split("(");
+// const main = rawMain.trim();
+// const boxid = rawMain.replace(/[^a-zA-Z0-9]+/g, "-");
+// const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+// //  now get the label size we want
+// const labSize = getLabelSize();
+// 
+// 
+//   return `
+//     <div class="govuk-form-group govuk-character-count" data-module="govuk-character-count" data-maxlength="${Number.isInteger(+opts[1]) && +opts[1] > 0 ? opts[1] : '200'}">
+// <h1 class="govuk-label-wrapper">
+//     <label class="govuk-label ${labSize}" for="${boxid}">
+//       ${main}
+//     </label>
+// </h1>
+//       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+//   <textarea class="govuk-textarea govuk-js-character-count" id="${boxid}" name="${boxid}" rows="${Number.isInteger(+opts[0]) && +opts[0] > 0 ? opts[0] : '5'}" aria-describedby="${boxid}"></textarea>
+//     <div id="${boxid}-info" class="govuk-hint govuk-character-count__message">
+//     You can enter up to ${opts[1]||"200"} characters
+//   </div>
+// </div>`;
+//     },
 
 
-  return `
-    <div class="govuk-form-group govuk-character-count" data-module="govuk-character-count" data-maxlength="${Number.isInteger(+opts[1]) && +opts[1] > 0 ? opts[1] : '200'}">
-<h1 class="govuk-label-wrapper">
-    <label class="govuk-label ${labSize}" for="${boxid}">
-      ${main}
-    </label>
-</h1>
-      ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
-  <textarea class="govuk-textarea govuk-js-character-count" id="${boxid}" name="${boxid}" rows="${Number.isInteger(+opts[0]) && +opts[0] > 0 ? opts[0] : '5'}" aria-describedby="${boxid}"></textarea>
-    <div id="${boxid}-info" class="govuk-hint govuk-character-count__message">
-    You can enter up to ${opts[1]||"200"} characters
-  </div>
-</div>`;
-    },
-
-
-date: (label,opts) => {
+date: (label,opts, context = {}) => {
 // first see if there is an error string, split it out if there is
 const [rawMain, error] = label.split("Error:");
 
@@ -499,8 +499,8 @@ const main = splitMain.trim();
 
 const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
 
-//  now get the label size we want
-const labSize = getLabelSize();
+//  now get the label size we want but not if this is a hidden component
+const labSize = context.isHidden ? "" : getLabelSize();
 
 
 return`
@@ -664,7 +664,10 @@ if (item.revealId && window.hiddenComponents && window.hiddenComponents[item.rev
     const hidden = hiddens[i];
     const key = hidden.type.replace("hidden_", "");
     if (COMPONENTS[key]) {
-      hiddenHtml += COMPONENTS[key](hidden.label, hidden.values, []);
+    //   hiddenHtml += COMPONENTS[key](hidden.label, hidden.values, []);
+    
+hiddenHtml += COMPONENTS[key](hidden.label, hidden.values, {isHidden: true});
+
     }
   }
 
@@ -755,7 +758,9 @@ if (item.revealId && window.hiddenComponents && window.hiddenComponents[item.rev
     const hidden = hiddens[i];
     const key = hidden.type.replace("hidden_", "");
     if (COMPONENTS[key]) {
-      hiddenHtml += COMPONENTS[key](hidden.label, hidden.values, []);
+    //   hiddenHtml += COMPONENTS[key](hidden.label, hidden.values, []);
+    hiddenHtml += COMPONENTS[key](hidden.label, hidden.values, {isHidden: true});
+
     }
   }
 
@@ -781,7 +786,7 @@ if (item.revealId && window.hiddenComponents && window.hiddenComponents[item.rev
 
 
     
-select: (label, opts) => {
+select: (label, opts,context = {}) => {
 // first see if there is an error string, split it out if there is
 const [rawMain, error] = label.split("Error:");
 
@@ -791,8 +796,8 @@ const main = splitMain.trim();
 
 const hint = rawHint ? rawHint.replace(/\)/, "").trim() : "";
 
-//  now get the label size we want
-const labSize = getLabelSize();
+//  now get the label size we want but not if this is a hidden component
+const labSize = context.isHidden ? "" : getLabelSize();
 
   return `
     <div class="govuk-form-group ${error ? ` govuk-form-group--error` : ""}">
@@ -819,9 +824,9 @@ ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message">
     `<div class="govuk-inset-text">${label}</div>`,
 
 //file upload
-upload: (label) => {
-//  now get the label size we want
-const labSize = getLabelSize();
+upload: (label,opts,context = {}) => {
+//  now get the label size we want but not if this is a hidden component
+const labSize = context.isHidden ? "" : getLabelSize();
 
 return `<div class="govuk-form-group">
   <label class="govuk-label ${labSize}" for="file-upload-1">
