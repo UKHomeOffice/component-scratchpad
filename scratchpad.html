@@ -438,14 +438,39 @@ const labSize = getLabelSize();
 
 
 character_count: (label,opts) => {
+// first see if there is an error string, split it out if there is
+const [rawMain, error] = label.split("Error:");
+
+// now look for a hint in whats left
+const [splitMain, rawHint] = rawMain.split("(");
+const main = splitMain.trim();
+const boxid = main.replace(/[^a-zA-Z0-9]+/g, "-");
+
+const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
+//  now get the label size we want
+const labSize = getLabelSize();
+
+
+  return `
+    <div class="govuk-form-group govuk-character-count ${error ? ` govuk-form-group--error` : ""}"" data-module="govuk-character-count" data-maxlength="${Number.isInteger(+opts[1]) && +opts[1] > 0 ? opts[1] : '200'}">
+    <label class="govuk-label ${labSize}" for="${boxid}">${main}</label>
+      ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
+        ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
+ <textarea class="govuk-textarea govuk-js-character-count ${error ? ` govuk-textarea--error` : ""}" id="${boxid}" name="${boxid}" rows="${Number.isInteger(+opts[0]) && +opts[0] > 0 ? opts[0] : '5'}" aria-describedby="${boxid}"></textarea>
+    <div id="${boxid}-info" class="govuk-hint govuk-character-count__message">
+    You can enter up to ${opts[1]||"200"} characters
+  </div>
+</div>`;
+    },
+    
+
+character_count_orig: (label,opts) => {
 const [rawMain, rawHint] = label.split("(");
 const main = rawMain.trim();
 const boxid = rawMain.replace(/[^a-zA-Z0-9]+/g, "-");
 const hint = rawHint ? rawHint.replace(/\)$/, "").trim() : "";
 //  now get the label size we want
 const labSize = getLabelSize();
-
-
 
 
   return `
@@ -462,8 +487,6 @@ const labSize = getLabelSize();
   </div>
 </div>`;
     },
-
-
 
 
 date: (label,opts) => {
@@ -1377,7 +1400,7 @@ hidden_h2|Label here|ID
 hidden_h3|Label here|ID
 alert_ho|Label here|Description|info/error/success
 spinner_ho|Label here
-timeline_ho|Label here|Title1:Author1:Date1:Description1|Title2:Author2:Date2:Description2|
+timeline_ho|Label here|Title1:Author1:Date1:Description1|Title2:Author2:Date2:Description2
 goback
 goback|Text here
 button|Label here|font colour|background colour
