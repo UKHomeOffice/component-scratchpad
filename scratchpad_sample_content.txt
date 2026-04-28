@@ -1,10 +1,10 @@
 ##comment|Paste this whole document into the input area and hit 'build page' to see all the components as of 1 April 2026. This first line is a comment and will not be visible on-screen (but will appear as a comment in the code).
 ##goback
-##alert_ho|This page is an example|It has been created using the scratchpad tool|success
+##alert_ho|This page is an example|It has been created using the scratchpad tool, written in 'scratchdown'|success
 ##spacer|10
 ##h1|Welcome to this auto-generated page|Example content
 ##h2|What's this all about then? (this is a h2)
-##p|This layout has been generated using the content description at the top of the page. 
+##p|This layout has been generated using the scratchdown language at the top of the page. 
 
 This component is part of a paragraph. It can contain multiple lines, like this.
 
