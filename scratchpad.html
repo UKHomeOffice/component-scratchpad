@@ -388,7 +388,57 @@ const COMPONENTS = {
       &nbsp;
     </div>`, 
     
+    
 placeholder: (label, opts) => {
+  const normaliseSize = (value, fallback = "300px") => {
+    if (typeof value !== "string" && typeof value !== "number") {
+      return fallback;
+    }
+
+    const v = String(value).trim();
+
+    // Percentage values (e.g. 50%)
+    if (/^\d+(\.\d+)?%$/.test(v)) {
+      return v;
+    }
+
+    // Numeric values → px
+    const n = parseInt(v, 10);
+    if (Number.isFinite(n) && n > 0) {
+      return `${n}px`;
+    }
+
+    return fallback;
+  };
+
+  const width = normaliseSize(opts?.[0]);
+  const height = normaliseSize(opts?.[1]);
+
+  return `
+    <div
+      class="govuk-form-group"
+      style="
+        margin:0;
+        width:${width};
+        height:${height};
+        background-color:#f3f2f1;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:#505a5f;
+        border:1px dashed #b1b4b6;
+        box-sizing:border-box;
+        text-align:center;
+        font-size:14pt
+      ">
+      ${label || ""}
+    </div>
+  `;
+},    
+    
+    
+    
+placeholder_old: (label, opts) => {
   const safeSize = (v, fallback = 300) =>
     Number.isFinite(parseInt(v, 10)) && parseInt(v, 10) > 0
       ? parseInt(v, 10)
