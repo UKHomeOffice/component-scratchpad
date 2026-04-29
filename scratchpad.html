@@ -387,6 +387,37 @@ const COMPONENTS = {
     <div class="govuk-form-group" style="padding:0x;margin:0px;height:${label}px;background-color:${opts[0]||"transparent"}">
       &nbsp;
     </div>`, 
+    
+placeholder: (label, opts) => {
+  const safeSize = (v, fallback = 300) =>
+    Number.isFinite(parseInt(v, 10)) && parseInt(v, 10) > 0
+      ? parseInt(v, 10)
+      : fallback;
+
+  const width = safeSize(opts?.[0]);
+  const height = safeSize(opts?.[1]);
+
+  return `
+    <div
+      class="govuk-form-group"
+      style="
+        margin:0;
+        margin-bottom:20px;
+        width:${width}px;
+        height:${height}px;
+        background-color:#f3f2f1;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:#505a5f;
+        border:2px dashed #333333;
+        box-sizing:border-box;
+        font-size:14pt
+      ">
+      ${label || ""}
+    </div>
+  `;
+},
        
 
 input: (label,opts, context = {}) => {
