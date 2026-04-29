@@ -1,10 +1,10 @@
 ##comment|Paste this whole document into the input area and hit 'build page' to see all the components as of 1 April 2026. This first line is a comment and will not be visible on-screen (but will appear as a comment in the code).
 ##goback
-##alert_ho|This page is an example|It has been created using the scratchpad tool, written in 'scratchdown'|success
+##ho_alert|This page is an example|It has been created using the scratchpad tool, written in 'scratchdown'|success
 ##spacer|10
 ##h1|Welcome to this auto-generated page|Example content
 ##h2|What's this all about then? (this is a h2)
-##p|This layout has been generated using the scratchdown language at the top of the page. 
+##p|This contains all the components you can build with Scratchpad. 
 
 This component is part of a paragraph. It can contain multiple lines, like this.
 
@@ -29,7 +29,7 @@ Each component in the GOV.UK Design System has guidance on its use and coded exa
 ##textarea|Your address (Please include any relevant floor number)
 ##select|Country of birth|Choose...|Angiers|Belgium|Canada|Denmark|Ecuador|France
 ##date|Your date of birth(For example 23 09 1942)
-##character_count|Other notes (This is the 'character count' component)|6|250
+##textarea|Other notes (This component has 6 rows)|6
 ##End Column
 ##End Row
 ##h3|And now... something in three columns
@@ -97,7 +97,7 @@ Each component in the GOV.UK Design System has guidance on its use and coded exa
 ##p|And now, nearly at the end... a timeline. This is at the end of the demo to more easily show (in the editing area) how it can be written in user-friendly way, without writing all your content in one continuous block.
 ##row
 ##column|50
-##timeline_ho|Creating this tool
+##ho_timeline|Creating this tool
 |How it all started
 :Ian
 :Feb 2026
@@ -112,5 +112,5 @@ Each component in the GOV.UK Design System has guidance on its use and coded exa
 :Successful demonstrations and use in a real design project suggest there might be lots of use cases out there...
 ##end column
 ##end row
-##spinner_ho|Don't wait any longer...
+##ho_spinner|Don't wait any longer...
 ##panel|Thanks for scrolling|Now go make your own content!

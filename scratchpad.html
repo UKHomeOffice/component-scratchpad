@@ -28,19 +28,11 @@ Original version Feb 27th, 2026 by Ian Smith.
   .component-block { margin: 4px 0; padding: 4px; border: 0px solid #b1b4b6;  }
   .gov-row { display: flex; flex-wrap: wrap; width: 100%; margin: 20px 0; }
   .gov-col { padding: 10px; }
-  
-.govuk-width-container {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  
-padding-left: 20px;
-  padding-right: 20px;
-}
+  .govuk-width-container {max-width: 1200px; margin-left: auto; margin-right: auto; padding-left: 20px; padding-right: 20px;}
 </style>
 
 <style id="_internal">
-  .showCode{color:#444;background-color:#ddd}
+  .showCode{color:#333;background-color:#ddd;font-size:12pt}
   .specHeader {font-size:12pt; vertical-align:top; border: 2px solid white;background-color:#eee;}
   .specRow {font-size:12pt; vertical-align:top; border: 0px solid white;background-color:#fff;}
   .specRow2 {font-size:12pt;vertical-align:top; border: 0px solid white;background-color:#eee;}
@@ -99,7 +91,8 @@ padding-left: 20px;
 				 <code class="showCode">##component_name | Label or text | column value:column value:column value</code><br><br>
 			
 				Provide basic layout using <code class="showCode">Row</code> and <code class="showCode">Column</code>. Define column width using the format 'Column|width' e.g. <code class="showCode">Column|100</code> will be full width,  <code class="showCode">Column|50</code> will be 50%.<br><br>
-				Once you're happy with the html, use the control below to copy it to the clipboard, then you can add it to your prototype.<br><br>
+				Once you're happy with the results, use the control below to copy the html to the clipboard, then add it to your prototype.<br><br>
+				(For components beginning with <code class="showCode">ho_</code>, <a class="govuk-link" href="https://design.homeoffice.gov.uk/design-system/get-started/home-office-plugin" target="_new">add the Home Office plugin to your prototype</a> so they display correctly.)
 			</div>
   </details>
 
@@ -108,7 +101,7 @@ padding-left: 20px;
         <span class="govuk-details__summary-text" >Supported components</span>
            </summary>
       <div class="govuk-details__text" id="supported-components">
-			<table class="specTable">
+  			<table>
 			<tr class="specHeader" style="font-weight:bold"><td>Component</td><td>Syntax</td><td>Notes</td></tr>
 			<tr class="specRow"><td>h1</td><td>h1|Text here|Caption</td><td>Caption is optional</td></tr>
 			<tr class="specRow2"><td>h2</td><td>h2|Text here|Caption</td><td>Caption is optional</td></tr>
@@ -152,7 +145,13 @@ padding-left: 20px;
 			<tr class="specRow2"><td>hr</td><td>hr</td><td></td></tr>
 			<tr class="specRow"><td>spacer</td><td>spacer|height|background color</td><td>Provides an empty div for cheeky padding. Colour is optional, defaults to transparent</td></tr>
 			<tr class="specRow2"><td>comment</td><td>comment|Text here</td><td>Appears as a comment in the html, not visible to end users</td></tr>
-			</table>
+			<tr class="specRow"><td>alert</td><td>ho_alert|Label here|Caption</td><td>Home Office Design system component</td></tr>
+			<tr class="specRow2"><td>spinner</td><td>ho_spinner|Label here</td><td>Home Office Design system component</td></tr>
+			<tr class="specRow"><td>timeline</td><td>ho_timeline|Label here|Title1:Author1:Date1:Description1|Title2:Author2:Date2:Description2</td><td>Home Office Design system component</td></tr>
+		</table>
+			
+			<table>
+				</table>
       </div>
     </details>
     
@@ -190,7 +189,7 @@ padding-left: 20px;
 </code>
 <br><br>
 Supported components:<br><code class="showCode">hidden_input, hidden_textarea, hidden_radio, hidden_checkbox, hidden_date, hidden_select, hidden_p, hidden_button_p, hidden_button_s, hidden_h2, hidden_h3 </code>
-<br><br>Important note: conditional reveals only work when <i>all</i> the IDs and hidden components have been specified. If its not working check you have at least one hidden component for every ID specified in the radio or checkox components.
+<br><br>Important note: conditional reveals only work when <i>all</i> the IDs and hidden components have been specified. If its not working check you have at least one hidden component for every ID specified in the radio or checkbox components.
 
 			</div>
   </details>
@@ -440,6 +439,7 @@ const labSize = context.isHidden ? "" : getLabelSize();
     },
 
 
+//this work in scratchpad but not PKit, so not publicly available
 character_count: (label,opts) => {
 // first see if there is an error string, split it out if there is
 const [rawMain, error] = label.split("Error:");
@@ -455,19 +455,17 @@ const labSize = getLabelSize();
 
 
   return `
-    <div class="govuk-form-group govuk-character-count ${error ? ` govuk-form-group--error` : ""}"" data-module="govuk-character-count" data-maxlength="${Number.isInteger(+opts[1]) && +opts[1] > 0 ? opts[1] : '200'}">
+    <div class="govuk-form-group govuk-character-count ${error ? ` govuk-form-group--error` : ""}" data-module="govuk-character-count" data-maxlength="${Number.isInteger(+opts[1]) && +opts[1] > 0 ? opts[1]:'200'}" maxlength="${Number.isInteger(+opts[1]) && +opts[1] > 0 ? opts[1]:'200'}">
     <label class="govuk-label ${labSize}" for="${boxid}">${main}</label>
       ${hint ? `<div class="govuk-hint">${hint}</div>` : ""}
         ${error ? `<p id="${main.replace(/ /g, "-")}-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> ${error}</p>` : ""}
- <textarea class="govuk-textarea govuk-js-character-count ${error ? ` govuk-textarea--error` : ""}" id="${boxid}" name="${boxid}" rows="${Number.isInteger(+opts[0]) && +opts[0] > 0 ? opts[0] : '5'}" aria-describedby="${boxid}"></textarea>
+ <textarea class="govuk-textarea govuk-js-character-count ${error ? ` govuk-textarea--error` : ""}" id="${boxid}" name="${boxid}" rows="${Number.isInteger(+opts[0]) && +opts[0] > 0 ? opts[0] : '5'}" aria-describedby="${boxid}" maxlength="${Number.isInteger(+opts[1]) && +opts[1] > 0 ? opts[1]:'200'}"></textarea>
     <div id="${boxid}-info" class="govuk-hint govuk-character-count__message">
     You can enter up to ${opts[1]||"200"} characters
   </div>
 </div>`;
     },
     
-
-
 
 
 date: (label,opts, context = {}) => {
@@ -530,8 +528,50 @@ goback: (label) =>
   button_s: (label) =>
     `<button class="govuk-button govuk-button--secondary" data-module="govuk-button">${label}</button>`,
 
-  button: (label,opts) =>
+  button_old: (label,opts) =>
     `<button class="govuk-button" style="color:${opts[0]||"white"};background-color:${opts[1]||"#116F48"};"data-module="govuk-button">${label}</button>`,
+
+button: (label, opts) => {
+  const textColour = opts[0] || "white";
+  const raw = (opts[1] || "").toString();
+
+  const isValidColour = (value) => {
+    const s = new Option().style;
+    s.color = "";
+    s.color = value;
+    return s.color !== "";
+  };
+
+  const colours = raw
+    .split("-")
+    .map(c => c.trim())
+    .filter(isValidColour);
+
+  let backgroundStyle = "background-color:#116F48;";
+
+  if (colours.length === 1) {
+    backgroundStyle = `background-color:${colours[0]};`;
+  }
+
+  
+if (colours.length > 1) {
+  backgroundStyle = `
+    background-color:#116F48;
+    background-image:linear-gradient(to right, ${colours.join(", ")});
+  `.trim();
+}
+
+
+  return `
+<button
+  class="govuk-button"
+  style="color:${textColour};${backgroundStyle}"
+  data-module="govuk-button">
+  ${label}
+</button>`;
+},
+
+
 
 //this used for hidden_radio only
 radio: (label) => {
@@ -830,7 +870,7 @@ return `<div class="govuk-form-group">
       <div class="govuk-panel__body">${opts[0]||""}</div>
     </div>`,
     
-  alert_ho: (label, opts) =>
+  ho_alert: (label, opts) =>
     `<div class="hods-alert hods-alert--${opts[1]||"info"}">
   <h2 class="hods-alert__heading">
     ${label}
@@ -840,7 +880,7 @@ return `<div class="govuk-form-group">
   </p>
 </div>`,
 
-  spinner_ho: (label, opts) =>
+  ho_spinner: (label, opts) =>
     `<div class="hods-loading-spinner" role="status">
   <div class="hods-loading-spinner__spinner" style="width:${opts[0]|80}px;height:${opts[0]|80}px"></div>
   <div class="hods-loading-spinner__content">
@@ -857,7 +897,7 @@ return `<div class="govuk-form-group">
 
 
 // ho office timeline - content rows delimited by |,  content within a row by :
-  timeline_ho: (label, opts) => `
+  ho_timeline: (label, opts) => `
     <h3 class="govuk-heading-m">${label}</h3>
     <div class="hods-timeline">
       ${opts.map(line => {
@@ -1409,6 +1449,17 @@ const errors = errorElements.map(p => ({
 
 
   initAll();
+  
+//   // we have to explicitly initialise the character count in scratchpad
+//   // because the code is generated dynamically the initAll() fails  it (apparently)
+// const CharacterCount = window.GOVUKFrontend.CharacterCount;
+// document
+//   .querySelectorAll('[data-module="govuk-character-count"]')
+//   .forEach(el => new CharacterCount(el));
+
+  
+  
+  
   copyBtn.disabled = false; // enable copy button after build
    // top and tail with comments
 const startComment = document.createComment("start of auto-generated html");
@@ -1467,10 +1518,10 @@ copyBtn.addEventListener("click", () => {
 
   // type ahead suggestions, if you add a new component above, please include it here 
   const suggList = `
-h1|Text here|Caption
-h2|Text here|Caption
-h3|Text here|Caption
-h4|Text here
+h1|Label here|Caption
+h2|Label here|Caption
+h3|Label here|Caption
+h4|TLabel here
 p|Text here
 a|Text here|href
 input|Label here (Optional hint)
@@ -1479,7 +1530,6 @@ date|Label here (Optional hint)
 radios|Label here (Optional hint) |Radio 1|Radio 2 |final radio
 checkboxes|Label here (Optional hint)|checkbox 1|checkbox 2|final checkbox
 select|Label here (Optional hint)|value 1|value 2|final option
-character_count|Label here (Optional hint)|Rows|max_count
 hidden_input|Label here|ID
 hidden_textarea|Label here|ID
 hidden_radio|Label here|ID
@@ -1491,11 +1541,11 @@ hidden_button_p|Label here|ID
 hidden_button_s|Label here|ID
 hidden_h2|Label here|ID
 hidden_h3|Label here|ID
-alert_ho|Label here|Description|info/error/success
-spinner_ho|Label here
-timeline_ho|Label here|Title1:Author1:Date1:Description1|Title2:Author2:Date2:Description2
+ho_alert|Label here|Description|info/error/success
+ho_spinner|Label here
+ho_timeline|Label here|Title1:Author1:Date1:Description1|Title2:Author2:Date2:Description2
 goback
-goback|Text here
+goback|Label here
 button|Label here|font colour|background colour
 button_p|Label here
 button_s|Label here
@@ -1503,7 +1553,7 @@ upload|Upload a file
 details|Title here |content
 inset|Text here
 warning|Text here
-panel|Title here|Description
+panel|Label here|Description
 tag|Text here
 listb|item:item:item:item |spaced
 listn|item:item:item:item|spaced
@@ -1579,9 +1629,19 @@ comment|Text here
       return;
     }
 
-    const matches = suggestions.filter(s =>
-      s.toLowerCase().startsWith(q)
-    );
+//     const matches = suggestions.filter(s =>
+//       s.toLowerCase().includes(q)
+//     );
+
+
+const matches = suggestions
+  .filter(s => s.toLowerCase().includes(q))
+  .sort((a, b) => {
+    const aStarts = a.toLowerCase().startsWith(q);
+    const bStarts = b.toLowerCase().startsWith(q);
+    return bStarts - aStarts; // true first
+  });
+
 
     selectedIndex = -1; // reset selection
 
