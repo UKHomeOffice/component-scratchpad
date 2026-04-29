@@ -531,6 +531,9 @@ goback: (label) =>
   button_old: (label,opts) =>
     `<button class="govuk-button" style="color:${opts[0]||"white"};background-color:${opts[1]||"#116F48"};"data-module="govuk-button">${label}</button>`,
 
+// this button code is much more complicated than the others as it contains an easter egg
+// allowing you to specify gradient background colours with any number of colours, 
+// e.g red-green-blue or #ff0000-#00ff00-#0000ff
 button: (label, opts) => {
   const textColour = opts[0] || "white";
   const raw = (opts[1] || "").toString();
