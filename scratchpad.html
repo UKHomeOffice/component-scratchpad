@@ -144,12 +144,14 @@ Original version Feb 27th, 2026 by Ian Smith.
 			<tr class="specRow"><td>column</td><td>column|width</td><td>Width is optional, defaults to 100%. Columns can only exist within a row. Use 'End Column' before defining a new column.</td></tr>
 			<tr class="specRow2"><td>hr</td><td>hr</td><td></td></tr>
 			<tr class="specRow"><td>spacer</td><td>spacer|height|background color</td><td>Provides an empty div for cheeky padding. Colour is optional, defaults to transparent</td></tr>
-			<tr class="specRow2"><td>comment</td><td>comment|Text here</td><td>Appears as a comment in the html, not visible to end users</td></tr>
-			<tr class="specRow"><td>alert</td><td>ho_alert|Label here|Caption</td><td>Home Office Design system component</td></tr>
-			<tr class="specRow2"><td>spinner</td><td>ho_spinner|Label here</td><td>Home Office Design system component</td></tr>
-			<tr class="specRow"><td>timeline</td><td>ho_timeline|Label here|Title1:Author1:Date1:Description1|Title2:Author2:Date2:Description2</td><td>Home Office Design system component</td></tr>
+			<tr class="specRow2"><td>placeholder</td><td>placeholder|label|width|height</td><td>Grey dashed border rectangle, with centered label. Width can be written as a percentage e.g. 30%</td></tr>
+			<tr class="specRow"><td>comment</td><td>comment|Text here</td><td>Appears as a comment in the html, not visible to end users</td></tr>
+			<tr class="specRow2"><td>alert</td><td>ho_alert|Label here|Caption</td><td>Home Office Design system component</td></tr>
+			<tr class="specRow"><td>spinner</td><td>ho_spinner|Label here</td><td>Home Office Design system component</td></tr>
+			<tr class="specRow2"><td>timeline</td><td>ho_timeline|Label here|Title1:Author1:Date1:Description1|Title2:Author2:Date2:Description2</td><td>Home Office Design system component</td></tr>
 		</table>
 			
+
 			<table>
 				</table>
       </div>
@@ -426,7 +428,7 @@ placeholder: (label, opts) => {
         align-items:center;
         justify-content:center;
         color:#505a5f;
-        border:1px dashed #b1b4b6;
+        border:2px dashed #444444;
         box-sizing:border-box;
         text-align:center;
         font-size:14pt
