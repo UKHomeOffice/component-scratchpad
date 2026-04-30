@@ -36,7 +36,6 @@ Original version Feb 27th, 2026 by Ian Smith.
   .specHeader {font-size:12pt; vertical-align:top; border: 2px solid white;background-color:#eee;}
   .specRow {font-size:12pt; vertical-align:top; border: 0px solid white;background-color:#fff;}
   .specRow2 {font-size:12pt;vertical-align:top; border: 0px solid white;background-color:#eee;}
-
 </style>
 
 </head>
@@ -389,6 +388,76 @@ const COMPONENTS = {
     <div class="govuk-form-group" style="padding:0x;margin:0px;height:${label}px;background-color:${opts[0]||"transparent"}">
       &nbsp;
     </div>`, 
+    
+    
+atlas_title: (label,opts) =>  `
+<h3 class="govuk-heading-m">${opts[0]||"Service Delivery"}</h3>
+<h1 class="govuk-heading-xl" style="color:#70009C;margin-top:-0px"">${opts[1]||"Case type"}</h1>
+<p class="govuk-body" style="margin-top:-45px">
+Last activity: t1_generalcw01, ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} 
+${new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })}</p>
+<h2 class="govuk-heading-l" style="margin-top:10px">${label}</h2>`, 
+
+atlas_nav: (label, opts) => `
+<table border="0" width="100%">
+  <tr>
+    <td width="17%" style="vertical-align: middle;">
+      ${opts[2] ? `
+        <button type="button" class="govuk-button" style="
+          background-color:white;
+          font-weight:bold;
+          font-size:16px;
+          color:#005EA5;
+          border:2px solid #bfc1c3;
+          box-shadow:none;
+          padding:10px 30px;">
+          ${opts[2]}
+        </button>` : ""}
+    </td>
+
+    <td width="30%" style="vertical-align: middle;">
+      ${opts[1] ? `
+        <button type="button" class="govuk-button" style="
+          background-color:#F1F0EF;
+          font-weight:bold;
+          font-size:16px;
+          color:#005EA5;
+          border:2px solid #004179;
+          box-shadow:none;
+          padding:10px 30px;">
+          ${opts[1]}
+        </button>` : ""}
+    </td>
+
+    <td width="21%" style="vertical-align: middle;">
+      ${opts[0] ? `
+        <button type="button" class="govuk-button" style="
+          background-color:#F1F0EF;
+          color:black;
+          font-weight:normal;
+          line-height: 1;
+          padding:10px 20px;">
+          ${opts[0]}
+        </button>` : ""}
+    </td>
+
+    <td style="vertical-align: middle;">
+      ${label ? `
+        <button class="govuk-button" style="
+          background-color:#004274;
+          color:white;
+          font-weight:bold;
+          line-height: 1;
+          padding:10px 20px;">
+          ${label}
+        </button>` : ""}
+    </td>
+  </tr>
+</table>
+`,
+    
+    
+    
     
     
 placeholder: (label, opts) => {
