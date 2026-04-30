@@ -542,17 +542,27 @@ atlas_nav: (label, opts) => `
     
     
 placeholder: (label, opts) => {
-  const normaliseSize = (value, fallback = "300px") => {
+  const normaliseSize = (value, extension, fallback = "300px") => {
     if (typeof value !== "string" && typeof value !== "number") {
       return fallback;
     }
 
     const v = String(value).trim();
 
-    // Percentage values (e.g. 50%)
-    if (/^\d+(\.\d+)?%$/.test(v)) {
-      return v;
-    }
+   //  // Percentage values (e.g. 50%)
+//     if (/^\d+(\.\d+)?%$/.test(v)) {
+//       return v;
+//     }
+
+
+if (/^(\d+(\.\d+)?)%$/.test(v)) {
+if (extension == "w") {
+  return `${RegExp.$1}%`;
+  } else {
+   return `${RegExp.$1}v` + extension; 
+  }
+}
+
 
     // Numeric values → px
     const n = parseInt(v, 10);
@@ -563,8 +573,8 @@ placeholder: (label, opts) => {
     return fallback;
   };
 
-  const width = normaliseSize(opts?.[0]);
-  const height = normaliseSize(opts?.[1]);
+  const width = normaliseSize(opts?.[0],"w");
+  const height = normaliseSize(opts?.[1],"h");
   
 // now some over-engineering to provide an automatic high contrast label colour,
 // regardless of the (optional) background color
@@ -634,7 +644,7 @@ if (isValidColour(input)) {
       style="
         margin:0;
         width:${width};
-        height:${height};
+        min-height:${height};
         background-color:${bgColor};
         display:flex;
         align-items:center;
