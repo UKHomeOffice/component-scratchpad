@@ -143,7 +143,7 @@ Original version Feb 27th, 2026 by Ian Smith.
 			<tr class="specRow"><td>column</td><td>column|width</td><td>Width is optional, defaults to 100%. Columns can only exist within a row. Use 'End Column' before defining a new column.</td></tr>
 			<tr class="specRow2"><td>hr</td><td>hr</td><td></td></tr>
 			<tr class="specRow"><td>spacer</td><td>spacer|height|background color</td><td>Provides an empty div for cheeky padding. Colour is optional, defaults to transparent</td></tr>
-			<tr class="specRow2"><td>placeholder</td><td>placeholder|label|width|height</td><td>Grey dashed border rectangle, with centered label. Width can be written as a percentage e.g. 30%</td></tr>
+			<tr class="specRow2"><td>placeholder</td><td>placeholder|label|width|height|background colour</td><td>Dashed border rectangle, with centered label. Height and Width can be written as a percentage e.g. 30%<br>Colour is optional, defaults to grey.</td></tr>
 			<tr class="specRow"><td>comment</td><td>comment|Text here</td><td>Appears as a comment in the html, not visible to end users</td></tr>
 			<tr class="specRow2"><td>alert</td><td>ho_alert|Label here|Caption</td><td>Home Office Design system component</td></tr>
 			<tr class="specRow"><td>spinner</td><td>ho_spinner|Label here</td><td>Home Office Design system component</td></tr>
@@ -472,7 +472,7 @@ atlas_nav: (label, opts) => `
     align-items:center;
     gap:20px;
   ">
-    ${opts[2] ? `
+    ${label ? `
       <button type="button" class="govuk-button" style="
         margin:0;
         background-color:white;
@@ -482,10 +482,10 @@ atlas_nav: (label, opts) => `
         border:2px solid #bfc1c3;
         box-shadow:none;
         padding:10px 30px;">
-        ${opts[2]}
+        ${label}
       </button>` : ""}
 
-    ${opts[1] ? `
+    ${opts[0] ? `
       <button type="button" class="govuk-button" style="
         margin:0;
         background-color:#F1F0EF;
@@ -495,7 +495,7 @@ atlas_nav: (label, opts) => `
         border:2px solid #004179;
         box-shadow:none;
         padding:10px 30px;">
-        ${opts[1]}
+        ${opts[0]}
       </button>` : ""}
   </div>
 
@@ -509,14 +509,14 @@ atlas_nav: (label, opts) => `
     justify-content:flex-end;      /* keeps 4 at the far right on its line */
     text-align:right;
   ">
-    ${opts[0] ? `
+    ${opts[1] ? `
       <button type="button" class="govuk-button govuk-button--secondary" style="
         margin:0;
         background-color:#F1F0EF;">
-        ${opts[0]}
+        ${opts[1]}
       </button>` : ""}
 
-    ${label ? `
+    ${opts[2] ? `
       <button type="button" class="govuk-button" style="
         margin:0;
         background-color:#004274;
@@ -532,7 +532,7 @@ atlas_nav: (label, opts) => `
         align-items:center;
         justify-content:center;
       ">
-        ${label}
+        ${opts[2]}
       </button>` : ""}
   </div>
 
@@ -1880,7 +1880,7 @@ column|width
 end column
 hr
 spacer|height|colour
-placeholder|label|width|height
+placeholder|label|width|height|colour
 comment|Text here 
 `.trim();
 

@@ -1,4 +1,4 @@
-##comment|Paste this whole document into the input area and hit 'build page' to see all the components as of 1 April 2026. This first line is a comment and will not be visible on-screen (but will appear as a comment in the code).
+##comment|Paste this whole document into the input area and hit 'build page' to see all the components as of 1 May 2026. This first line is a comment and will not be visible on-screen (but will appear as a comment in the code).
 ##goback
 ##ho_alert|This page is an example|It has been created using the scratchpad tool, written in 'scratchdown'|success
 ##spacer|10
