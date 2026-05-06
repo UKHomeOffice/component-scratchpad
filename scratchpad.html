@@ -46,7 +46,7 @@ Original version Feb 27th, 2026 by Ian Smith.
 
 <div class="govuk-header" style="padding-top:20px">
   <div class="govuk-header__container govuk-width-container">
-  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 2.3)</h1>
+  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 2.4)</h1>
    </div>
   </div>
   
@@ -1796,6 +1796,9 @@ copyBtn.addEventListener("click", () => {
   });
   
   
+   temp.querySelectorAll("[data-govuk-checkboxes-init]").forEach(el => {
+    el.removeAttribute("data-govuk-checkboxes-init");
+  });
 
   // If you later find other components adding their own init markers,
   // you can generalise it like this:
