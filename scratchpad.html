@@ -1011,6 +1011,9 @@ const labSize = getLabelSize();
   `;
 
   processed.forEach((item, i) => {
+   if (item.display == "or") {
+    html += `<div class="govuk-checkboxes__divider">or</div>`;
+  } else {
     const inputId = `${label}-${i}`;
     const revealAttr = item.revealId ? ` data-aria-controls="conditional-${item.revealId}"` : "";
 
@@ -1024,7 +1027,7 @@ const labSize = getLabelSize();
           <label class="govuk-label govuk-checkboxes__label"
                  for="${inputId}">${item.display}</label>
         </div>
-    `;
+    `};
 
 
 
@@ -2264,43 +2267,7 @@ function restoreEverything() {
 })();
 </script>
 
-<!-- load GDS transport -->
-<script>
-function loadGDSTransport({
-  regularWoff2,
-  regularWoff,
-  boldWoff2,
-  boldWoff
-}) {
-  if (document.getElementById('gds-transport-font')) return;
 
-  const style = document.createElement('style');
-  style.id = 'gds-transport-font';
-  style.textContent = `
-    @font-face {
-      font-family: 'GDS Transport';
-      src:
-        url('${regularWoff2}') format('woff2'),
-        url('${regularWoff}') format('woff');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: 'GDS Transport';
-      src:
-        url('${boldWoff2}') format('woff2'),
-        url('${boldWoff}') format('woff');
-      font-weight: 700;
-      font-style: normal;
-      font-display: swap;
-    }
-  `;
-
-  document.head.appendChild(style);
-}
-</script>
 
 
 </body>
