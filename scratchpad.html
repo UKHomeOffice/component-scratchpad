@@ -29,7 +29,7 @@ Original version Feb 27th, 2026 by Ian Smith.
   .gov-row { display: flex; flex-wrap: wrap; width: 100%; margin: 20px 0; }
   .gov-col { padding: 10px; }
   .govuk-width-container {max-width: 1200px; margin-left: auto; margin-right: auto; padding-left: 20px; padding-right: 20px;}
-  .hods-page, body, html {height: auto !important; min-height: auto !important;}
+  .hods-page, body, html {font-family:'GDS Transport',Helvetica, sans;height: auto !important; min-height: auto !important;}
 </style>
 
 <style id="_internal">
@@ -406,63 +406,6 @@ Last activity: t1_generalcw01, ${new Date().toLocaleDateString('en-GB', { day: '
 ${new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })}</p>
 <h2 class="govuk-heading-l" style="margin-top:10px">${label}</h2>`, 
 
-atlas_nav_old: (label, opts) => `
-<table border="0" width="100%">
-  <tr>
-    <td width="17%" style="vertical-align: middle;">
-      ${opts[2] ? `
-        <button type="button" class="govuk-button" style="
-          background-color:white;
-          font-weight:bold;
-          font-size:16px;
-          color:#005EA5;
-          border:2px solid #bfc1c3;
-          box-shadow:none;
-          padding:10px 30px;">
-          ${opts[2]}
-        </button>` : ""}
-    </td>
-
-    <td width="30%" style="vertical-align: middle;">
-      ${opts[1] ? `
-        <button type="button" class="govuk-button" style="
-          background-color:#F1F0EF;
-          font-weight:bold;
-          font-size:16px;
-          color:#005EA5;
-          border:2px solid #004179;
-          box-shadow:none;
-          padding:10px 30px;">
-          ${opts[1]}
-        </button>` : ""}
-    </td>
-
-    <td width="21%" style="vertical-align: middle;">
-      ${opts[0] ? `
-        <button type="button" class="govuk-button" style="
-          background-color:#F1F0EF;
-          color:black;
-          font-weight:normal;
-          line-height: 1;
-          padding:10px 20px;">
-          ${opts[0]}
-        </button>` : ""}
-    </td>
-
-    <td style="vertical-align: middle;">
-      ${label ? `
-        <button class="govuk-button" style="
-          background-color:#004274;
-          color:white;
-          font-weight:bold;
-          line-height: 1;
-          padding:10px 20px;">
-          ${label}
-        </button>` : ""}
-    </td>
-  </tr>
-</table>
-`,
     
 atlas_nav: (label, opts) => `
 <div style="
@@ -2275,12 +2218,39 @@ let previousActive = null;
     });
   }
 
-  function restoreEverything() {
-    hiddenElements.forEach(([el, display]) => {
-      el.style.display = display || '';
+//   function restoreEverything() {
+//     hiddenElements.forEach(([el, display]) => {
+//       el.style.display = display || '';
+//     });
+//     hiddenElements = [];
+//   }
+
+function restoreEverything() {
+  // 1. Make everything visible but transparent
+  hiddenElements.forEach(([el, display]) => {
+    el.style.display = display || '';
+    el.style.opacity = '0';
+    el.style.transition = 'opacity 500ms ease';
+  });
+
+  // 2. Force a reflow so the browser registers opacity:0
+  void document.body.offsetHeight;
+
+  // 3. Fade everything back in together
+  hiddenElements.forEach(([el]) => {
+    el.style.opacity = '1';
+  });
+
+  // 4. Cleanup inline styles after animation
+  setTimeout(() => {
+    hiddenElements.forEach(([el]) => {
+      el.style.transition = '';
+      el.style.opacity = '';
     });
     hiddenElements = [];
-  }
+  }, 200);
+}
+
 
   // Escape to restore
   document.addEventListener('keydown', e => {
@@ -2294,7 +2264,43 @@ let previousActive = null;
 })();
 </script>
 
+<!-- load GDS transport -->
+<script>
+function loadGDSTransport({
+  regularWoff2,
+  regularWoff,
+  boldWoff2,
+  boldWoff
+}) {
+  if (document.getElementById('gds-transport-font')) return;
 
+  const style = document.createElement('style');
+  style.id = 'gds-transport-font';
+  style.textContent = `
+    @font-face {
+      font-family: 'GDS Transport';
+      src:
+        url('${regularWoff2}') format('woff2'),
+        url('${regularWoff}') format('woff');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'GDS Transport';
+      src:
+        url('${boldWoff2}') format('woff2'),
+        url('${boldWoff}') format('woff');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+  `;
+
+  document.head.appendChild(style);
+}
+</script>
 
 
 </body>
