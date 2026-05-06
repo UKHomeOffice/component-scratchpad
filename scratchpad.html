@@ -44,13 +44,13 @@ Original version Feb 27th, 2026 by Ian Smith.
 <body class="govuk-template__body govuk-frontend-supported">
 <script>document.body.className += " js-enabled";</script>
 
-<div class="govuk-header" style="padding-top:20px">
+<div class="govuk-header" style="padding-top:20px" id="scratch_Header">
   <div class="govuk-header__container govuk-width-container">
   <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 2.4)</h1>
    </div>
   </div>
   
- <div class="govuk-phase-banner govuk-width-container">
+ <div class="govuk-phase-banner govuk-width-container" id="scratch_Banner">
   <p class="govuk-phase-banner__content">
     <strong class="govuk-tag govuk-phase-banner__content__tag">
       Discovery
@@ -62,9 +62,9 @@ Original version Feb 27th, 2026 by Ian Smith.
 </div> 
   
 <div class="govuk-width-container">
-<br>&nbsp;
-<p class="govuk-body">Use this tool to quickly create html content for prototypes and other non-live pages, based on gov.uk components.</p>
-<ul class="govuk-list govuk-list--bullet">
+
+<p class="govuk-body" id="scratch_info1"><br>Use this tool to quickly create html content for prototypes and other non-live pages, based on gov.uk components.</p>
+<ul class="govuk-list govuk-list--bullet" id="scratch_links">
   <li>
 <a class="govuk-link" href="javascript:createAndOpenModal('how-it-works', 'How it works')">How it works</a><br>
 </li>
@@ -200,7 +200,7 @@ Supported components:<br><code class="showCode">hidden_input, hidden_textarea, h
     
    
 <!-- content suggestion on/off checkbox -->
-<div class="govuk-form-group">
+<div class="govuk-form-group" id="scratch_info1">
 
 <div class="govuk-form-group"> 
 
@@ -266,6 +266,12 @@ Supported components:<br><code class="showCode">hidden_input, hidden_textarea, h
   Copy code to clipboard
 </button>
 
+<button id="fullScreenBtn"
+        class="govuk-button govuk-!-margin-top-3"
+        disabled style="background-color:#1a65a6; float:right">
+  Full screen preview (ESC to cancel)
+</button>
+
 <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l" style="border-width:5px"/>
 
 <!-- generated page lives in div id 'output'-->
@@ -279,7 +285,7 @@ Supported components:<br><code class="showCode">hidden_input, hidden_textarea, h
 
 
 <!-- footer -->
-<div class="govuk-footer">
+<div class="govuk-footer" id="scratch_footer">
   <div class="govuk-width-container">
     <svg
       focusable="false"
@@ -348,6 +354,7 @@ function getLabelSize() {
 
 
 const copyBtn = document.getElementById("copyBtn");
+const fullScreenBtn = document.getElementById("fullScreenBtn");
 
 import { initAll } from "https://unpkg.com/govuk-frontend@6.0.0/dist/govuk/govuk-frontend.min.js";
 initAll();
@@ -1771,6 +1778,7 @@ const errors = errorElements.map(p => ({
   
   
   copyBtn.disabled = false; // enable copy button after build
+  fullScreenBtn.disabled = false;
    // top and tail with comments
 const startComment = document.createComment("start of auto-generated html");
 const endComment = document.createComment("end of auto-generated html");
@@ -1778,6 +1786,11 @@ output.insertBefore(startComment, output.firstChild);
 output.appendChild(endComment);
 
 }
+
+fullScreenBtn.addEventListener("click", () => {
+fsPreview();
+});
+
 
 
 
@@ -2225,6 +2238,61 @@ title.textContent = titleText || '';
 let previousActive = null;
 </script>
 
+<!--  full screen preview, hides everyhing else on screen,
+ hit ESCAPE to cancel -->
+<script>
+(function () {
+  let hiddenElements = [];
+
+  function findOutput() {
+    return document.querySelector('.output, #output');
+  }
+
+  function hideEverythingExceptOutput() {
+    const output = findOutput();
+
+    if (!output) {
+      console.warn('No .output or #output found');
+      return;
+    }
+
+    hiddenElements = [];
+
+    document.querySelectorAll('body *').forEach(el => {
+      if (
+        el === output ||
+        output.contains(el) ||
+        el.contains(output)
+      ) {
+        return;
+      }
+
+      const currentDisplay = getComputedStyle(el).display;
+      if (currentDisplay !== 'none') {
+        hiddenElements.push([el, el.style.display]);
+        el.style.display = 'none';
+      }
+    });
+  }
+
+  function restoreEverything() {
+    hiddenElements.forEach(([el, display]) => {
+      el.style.display = display || '';
+    });
+    hiddenElements = [];
+  }
+
+  // Escape to restore
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      restoreEverything();
+    }
+  });
+
+  // expose API
+  window.fsPreview = hideEverythingExceptOutput;
+})();
+</script>
 
 
 
