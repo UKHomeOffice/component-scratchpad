@@ -46,7 +46,7 @@ Original version Feb 27th, 2026 by Ian Smith.
 
 <div class="govuk-header" style="padding-top:20px" id="scratch_Header">
   <div class="govuk-header__container govuk-width-container">
-  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 2.4)</h1>
+  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 2.5)</h1>
    </div>
   </div>
   
@@ -145,12 +145,13 @@ Original version Feb 27th, 2026 by Ian Smith.
 			<tr class="specRow2"><td>hr</td><td>hr</td><td></td></tr>
 			<tr class="specRow"><td>spacer</td><td>spacer|height|background color</td><td>Provides an empty div for cheeky padding. Colour is optional, defaults to transparent</td></tr>
 			<tr class="specRow2"><td>placeholder</td><td>placeholder|label|width|height|background colour</td><td>Dashed border rectangle, with centered label. Height and Width can be written as a percentage e.g. 30%<br>Colour is optional, defaults to grey.</td></tr>
-			<tr class="specRow"><td>comment</td><td>comment|Text here</td><td>Appears as a comment in the html, not visible to end users</td></tr>
 			<tr class="specRow2"><td>alert</td><td>ho_alert|Label here|Caption</td><td>Home Office Design system component</td></tr>
 			<tr class="specRow"><td>spinner</td><td>ho_spinner|Label here</td><td>Home Office Design system component</td></tr>
 			<tr class="specRow2"><td>timeline</td><td>ho_timeline|Label here |Title1:Author1:Date1:Description1 |Title2:Author2:Date2:Description2</td><td>Home Office Design system component</td></tr>
 			<tr class="specRow"><td>gov.uk header</td><td>gov_header</td><td>gov.uk header component</td></tr>
 			<tr class="specRow2"><td>gov.uk nav</td><td>gov_nav|Service name|Link 1:url|Link 2:url|Final link:url</td><td>gov.uk service navigation component, urls are optional</td></tr>
+			<tr class="specRow"><td>comment</td><td>comment|Text here</td><td>Appears as a comment in the html, not visible to end users</td></tr>
+			<tr class="specRow2"><td>page metadata</td><td>page|Page title|Page file name</td><td>Not displayed on screen, saved as a comment. Page file name is used as part of the filename when you save your scratchdown.</td></tr>
 		
 		</table>
 			
@@ -361,7 +362,8 @@ Supported components:<br><code class="showCode">hidden_input, hidden_textarea, h
 <!-- scripts! -->
 <script type="module">
 
-
+// this is where we store the page title and fileRef, if the user sets one
+window.pageInfo = {};
 
 function getLabelSize() {
   return document.getElementById("label-size").value;
@@ -1701,9 +1703,6 @@ if (parts.length >= 3) {
 
 
 
-///
-
-
 /* --- build the page --- */
 document.getElementById("buildBtn").addEventListener("click", buildPage);
 const output = document.getElementById("output");
@@ -1798,6 +1797,17 @@ line = line.replace(/<br>$/, "");
         const myComment = document.createComment(line.split("|")[1]);
        output.appendChild(document.createTextNode("\n"));
   	 output.appendChild(myComment);
+   	output.appendChild(document.createTextNode("\n"));
+      return;
+    }
+
+  /* ---- page info ---- */
+    if (line.toLowerCase().startsWith("page")) {
+        pageInfo.pageTitle = line.split("|")[1];
+        pageInfo.pageRef = line.split("|")[2];
+        const fullRef = document.createComment("Page title:" + pageInfo.pageTitle + "|Page ref:" + pageInfo.pageRef);
+       output.appendChild(document.createTextNode("\n"));
+  	 output.appendChild(fullRef);
    	output.appendChild(document.createTextNode("\n"));
       return;
     }
@@ -2021,6 +2031,7 @@ gov_header
 gov_nav|Service name|Link 1:url|Link 2:url|Final link:url
 gov_footer
 comment|Text here 
+page|Page title|Page file name
 `.trim();
 
   const suggestions = suggList
@@ -2447,12 +2458,18 @@ function restoreEverything() {
 <script>
 function saveDefinition() {
   const text = document.getElementById('definition').value;
+  
   if (!text) return;
 
  const now = new Date();
-const date = now.toISOString().slice(0, 10);
+const fName = now.toISOString().slice(0, 10);
 const time = now.toTimeString().slice(0, 8).replace(/:/g, '');
-const filename = `scratch-${date}-${time}.txt`;
+
+const filename = pageInfo.pageRef
+  ? `sd-${pageInfo.pageRef}-${time}.txt`
+  : `sd-${fName}-${time}.txt`;
+
+
 
   const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
   const url = URL.createObjectURL(blob);
