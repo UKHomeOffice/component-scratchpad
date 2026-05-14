@@ -2541,6 +2541,43 @@ function loadDefinition_old() {
 }
 </script>
 
+<!-- 
+// allow the scripting area to accept text files dragged into iut
+ -->
+<script>
+(function () {
+  const textarea = document.getElementById('definition');
+  if (!textarea) return;
+
+  // Prevent default drag behaviour
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
+    textarea.addEventListener(event, e => e.preventDefault());
+  });
+
+  // Visual hint (optional)
+  textarea.addEventListener('dragover', () => {
+    textarea.classList.add('drag-over');
+  });
+
+  textarea.addEventListener('dragleave', () => {
+    textarea.classList.remove('drag-over');
+  });
+
+  textarea.addEventListener('drop', e => {
+    textarea.classList.remove('drag-over');
+
+    const file = e.dataTransfer.files[0];
+    if (!file || !file.type.startsWith('text/')) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      textarea.value = reader.result;
+    };
+    reader.readAsText(file);
+  });
+})();
+</script>
+
 
 </body>
 </html>
