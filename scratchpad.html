@@ -46,7 +46,7 @@ Original version Feb 27th, 2026 by Ian Smith.
 
 <div class="govuk-header" style="padding-top:20px" id="scratch_Header">
   <div class="govuk-header__container govuk-width-container">
-  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 2.5)</h1>
+  <h1 class="govuk-heading-l" style="color:#eee;margin-bottom:20px">GOV.UK component scratchpad (v 2.6)</h1>
    </div>
   </div>
   
@@ -404,8 +404,10 @@ const COMPONENTS = {
   p: (label) => `
     <p class="govuk-body">${label}</p>`,
     
-  a: (label,opts) => `
-    <p class="govuk-body"><a href="${opts[0]||""}" class="govuk-link">${label}</a></p>`,
+  a: (label,opts) => {
+ return `<p class="govuk-body"><a href="${opts[0]||""}" class="govuk-link">${label}</a></p>`;
+ },
+
 
   hr: (label) => `
     <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l"/>`,
@@ -2577,7 +2579,36 @@ function loadDefinition_old() {
   });
 })();
 </script>
+<script>
 
+window.setId = function(actions){
+const a = actions.find(x => x.trim().startsWith('setid:'));
+alert(a);
+  return a ? `data-sc-id="${a.split(':')[1]}"` : '';
+};
+
+window.setActions = function(actions){
+  return actions.map(a=>{
+    const [type,id,val] = a.split(':');
+    if(type==='show') return `doAction('${id}','display','block');`;
+    if(type==='hide') return `doAction('${id}','display','none');`;
+    if(type==='enable') return `doAction('${id}','enabled','true');`;
+    if(type==='disable') return `doAction('${id}','disabled','true');`;
+    if(type==='go') return `doAction('${id}','window.url','${val||id}');`;
+    return '';
+  }).filter(Boolean).join('');
+};
+
+window.doAction = function(thisId, prop, value){
+  document.querySelectorAll(`[data-sc-id="${thisId}"]`).forEach(el=>{
+    if(prop==='display') el.style.display = value;
+    else if(prop==='enabled') el.disabled = false;
+    else if(prop==='disabled') el.disabled = true;
+    else if(prop==='window.url') window.location.href = value;
+  });
+};
+
+</script>
 
 </body>
 </html>
